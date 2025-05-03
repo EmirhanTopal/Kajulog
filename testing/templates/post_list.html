@@ -1,0 +1,7 @@
+{% for post in posts %}
+    <div>
+        <h2><a href="{% url 'post_detail' slug=post.slug %}">{{ post.title }}</a></h2>
+        <p>Yazar: {{ post.author.username }} | Kategori: {{ post.get_category_display }}</p>
+        <p>{{ post.content|truncatewords:20 }}</p>
+    </div>
+{% endfor %}

@@ -1,0 +1,38 @@
+<h1>{{ post.title }}</h1>
+<p>{{ post.content }}</p>
+{% if post.image %}
+    <img src="{{ post.image.url }}" alt="Post image">
+{% endif %}
+
+<p>{{ post.view_count }} görüntülenme</p>
+
+<h3>Beğeni</h3>
+<form action="{% url 'toggle_like' slug=post.slug %}" method="post">
+    {% csrf_token %}
+    <button type="submit">
+        {% if user.is_authenticated and post.likes.filter(user=user, is_like=True).exists %}
+            👎 Beğenme
+        {% else %}
+            👍 Beğen
+        {% endif %}
+    </button>
+</form>
+
+<h3>Yorumlar</h3>
+<ul>
+    {% for comment in comments %}
+        <li>{{ comment.user.username }}: {{ comment.content }}</li>
+    {% empty %}
+        <li>Henüz yorum yok.</li>
+    {% endfor %}
+</ul>
+
+{% if user.is_authenticated %}
+    <form action="{% url 'add_comment' slug=post.slug %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Yorum Yap</button>
+    </form>
+{% else %}
+    <p>Yorum yapabilmek için <a href="{% url 'login' %}">giriş</a> yapmalısın.</p>
+{% endif %}
