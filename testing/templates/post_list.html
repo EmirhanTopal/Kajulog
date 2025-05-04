@@ -1,7 +1,21 @@
-{% for post in posts %}
-    <div>
-        <h2><a href="{% url 'post_detail' slug=post.slug %}">{{ post.title }}</a></h2>
-        <p>Yazar: {{ post.author.username }} | Kategori: {{ post.get_category_display }}</p>
-        <p>{{ post.content|truncatewords:20 }}</p>
-    </div>
-{% endfor %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Post Listesi</title>
+</head>
+<body>
+    <h1>Gönderiler</h1>
+    
+    {% if posts %}
+        {% for post in posts %}
+            <div style="margin-bottom: 20px;">
+                <h2>{{ post.title }}</h2>
+                <p>{{ post.content }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Henüz hiç gönderi yok.</p>
+    {% endif %}
+</body>
+</html>
+
