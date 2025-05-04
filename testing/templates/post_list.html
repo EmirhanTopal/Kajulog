@@ -1,21 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-    <title>Post Listesi</title>
+    <meta charset="UTF-8">
+    <title>Gönderi Listesi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px 40px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .post {
+            border-bottom: 1px solid #ddd;
+            padding: 20px 0;
+        }
+
+        .post:last-child {
+            border-bottom: none;
+        }
+
+        .post-title {
+            font-size: 24px;
+            color: #00796b;
+            margin: 0;
+        }
+
+        .post-content {
+            margin: 10px 0;
+            color: #555;
+        }
+
+        .detail-button {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .detail-button:hover {
+            background-color: #005b4f;
+        }
+
+        .no-posts {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+    </style>
 </head>
 <body>
-    <h1>Gönderiler</h1>
-    
-    {% if posts %}
-        {% for post in posts %}
-            <div style="margin-bottom: 20px;">
-                <h2>{{ post.title }}</h2>
-                <p>{{ post.content }}</p>
-            </div>
-        {% endfor %}
-    {% else %}
-        <p>Henüz hiç gönderi yok.</p>
-    {% endif %}
+    <div class="container">
+        <h1>Gönderiler</h1>
+
+        {% if posts %}
+            {% for post in posts %}
+                <div class="post">
+                    <h2 class="post-title">{{ post.title }}</h2>
+                    <p class="post-content">{{ post.content|truncatewords:30 }}</p>
+                    <a href="{% url 'post_detail' slug=post.slug %}" class="detail-button">Detayları Gör</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-posts">Henüz hiç gönderi yok.</div>
+        {% endif %}
+    </div>
 </body>
 </html>
-

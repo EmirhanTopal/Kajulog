@@ -1,38 +1,128 @@
-<h1>{{ post.title }}</h1>
-<p>{{ post.content }}</p>
-{% if post.image %}
-    <img src="{{ post.image.url }}" alt="Post image">
-{% endif %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 30px;
+        }
 
-<p>{{ post.view_count }} görüntülenme</p>
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: white;
+            padding: 30px 40px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
 
-<h3>Beğeni</h3>
-<form action="{% url 'toggle_like' slug=post.slug %}" method="post">
-    {% csrf_token %}
-    <button type="submit">
-        {% if user.is_authenticated and post.likes.filter(user=user, is_like=True).exists %}
-            👎 Beğenme
-        {% else %}
-            👍 Beğen
-        {% endif %}
-    </button>
-</form>
+        h1 {
+            color: #00796b;
+            margin-bottom: 10px;
+        }
 
-<h3>Yorumlar</h3>
-<ul>
-    {% for comment in comments %}
-        <li>{{ comment.user.username }}: {{ comment.content }}</li>
-    {% empty %}
-        <li>Henüz yorum yok.</li>
-    {% endfor %}
-</ul>
+        .meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
 
-{% if user.is_authenticated %}
-    <form action="{% url 'add_comment' slug=post.slug %}" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Yorum Yap</button>
-    </form>
-{% else %}
-    <p>Yorum yapabilmek için <a href="{% url 'login' %}">giriş</a> yapmalısın.</p>
-{% endif %}
+        .content {
+            margin-bottom: 40px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .comments {
+            margin-top: 40px;
+        }
+
+        .comment {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+
+        .comment:last-child {
+            border-bottom: none;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #00796b;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005b4f;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: #00796b;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ post.title }}</h1>
+        <div class="meta">
+            <p><strong>Yazar:</strong> {{ post.author.username }} |
+               <strong>Kategori:</strong> {{ post.get_category_display }} |
+               <strong>Görüntülenme:</strong> {{ post.view_count }}</p>
+        </div>
+
+        <div class="content">
+            {{ post.content|linebreaks }}
+        </div>
+
+        <div class="comments">
+            <h2>Yorumlar</h2>
+            {% if comments %}
+                {% for comment in comments %}
+                    <div class="comment">
+                        <p><strong>{{ comment.author }}</strong>: {{ comment.content }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Henüz yorum yok.</p>
+            {% endif %}
+        </div>
+
+        <div class="comment-form">
+            <h3>Yorum Yaz</h3>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Gönder</button>
+            </form>
+        </div>
+
+        <a href="{% url 'post_list' %}" class="back-link">← Tüm Yazılar</a>
+    </div>
+</body>
+</html>
