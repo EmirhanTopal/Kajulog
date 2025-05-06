@@ -1,28 +1,96 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="eng">
 <head>
   <meta charset="UTF-8">
-  <title>Kayıt Ol</title>
+  <title>Sign Up</title>
   <style>
-    body { font-family: Arial; background: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; }
-    .signup-box {
-      background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 300px;
+    * {
+      box-sizing: border-box;
     }
-    input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
-    button { width: 100%; background: #00796b; color: white; padding: 10px; border: none; border-radius: 5px; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #00796b, #005b4f);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .signup-container {
+      background: #ffff;
+      padding: 40px 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .signup-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #005b4f;
+    }
+
+    form input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      transition: border-color 0.3s;
+    }
+
+    form input:focus {
+      outline: none;
+      border-color: #00796b;
+    }
+
+    button {
+      width: 100%;
+      background: #00796b;
+      color: white;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button hover {
+      background: #005b4f;
+    }
+
+    .login-link{
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .login-link a{
+      color: #00796b;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .login-link a:hover{
+      text-decoration: underline;
+    }
+
   </style>
 </head>
 <body>
-  <div class="signup-box">
-    <h2>Kayıt Ol</h2>
+  <div class="signup-container">
+    <h2>Sign Up</h2>
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit">Kayıt Ol</button>
+      <button type="submit">Sign Up</button>
     </form>
-    <p style="text-align:center; margin-top:10px;">
-      Zaten hesabın var mı? <a href="{% url 'login' %}">Giriş Yap</a>
-    </p>
-  </div>
+  <div class="login-link">
+    Already have an account? <a href="{% url 'login' %}">Log in</a>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="eng">
 <head>
     <meta charset="UTF-8">
     <title>{{ post.title }}</title>
@@ -91,9 +91,9 @@
     <div class="container">
         <h1>{{ post.title }}</h1>
         <div class="meta">
-            <p><strong>Yazar:</strong> {{ post.author.username }} |
-               <strong>Kategori:</strong> {{ post.get_category_display }} |
-               <strong>Görüntülenme:</strong> {{ post.view_count }}</p>
+            <p><strong>Writer:</strong> {{ post.author.username }} |
+               <strong>Category:</strong> {{ post.get_category_display }} |
+               <strong>Views:</strong> {{ post.view_count }}</p>
         </div>
 
         <div class="content">
@@ -101,28 +101,28 @@
         </div>
 
         <div class="comments">
-            <h2>Yorumlar</h2>
+            <h2>Comments</h2>
             {% if comments %}
                 {% for comment in comments %}
                     <div class="comment">
-                        <p><strong>{{ comment.author }}</strong>: {{ comment.content }}</p>
+                        <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
                     </div>
                 {% endfor %}
             {% else %}
-                <p>Henüz yorum yok.</p>
+                <p>No comments yet.</p>
             {% endif %}
         </div>
 
         <div class="comment-form">
-            <h3>Yorum Yaz</h3>
-            <form method="post">
+            <h3>Write Comment</h3>
+            <form method="post" action="{% url 'add_comment' post.slug %}">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit">Gönder</button>
+                <button type="submit">Send</button>
             </form>
         </div>
 
-        <a href="{% url 'post_list' %}" class="back-link">← Tüm Yazılar</a>
+        <a href="{% url 'post_list' %}" class="back-link">← All Posts</a>
     </div>
 </body>
 </html>

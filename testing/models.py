@@ -15,28 +15,28 @@ class Profile(models.Model):
 
 class Post(models.Model):
     CATEGORY_CHOICES = [
-        ('book', 'Kitap'),
-        ('article', 'Makale'),
-        ('recipe', 'Yemek Tarifi'),
-        ('movie', 'Film'),
-        ('activity', 'Spor Aktivitesi'),
-        ('other', 'Diğer'),
+        ('book', 'Book'),
+        ('article', 'Article'),
+        ('recipe', 'Food&Recipe'),
+        ('movie', 'Movies'),
+        ('activity', 'Sport Activities'),
+        ('other', 'Others'),
     ]
 
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
-    title = models.CharField(max_length=200, verbose_name="Başlık")
+    title = models.CharField(max_length=200, verbose_name="Title")
     slug = models.SlugField(max_length=200, unique=True, blank=True)
-    content = models.TextField(verbose_name="İçerik")
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, verbose_name="Kategori")
-    image = models.ImageField(upload_to='posts/', blank=True, null=True, verbose_name="Görsel")
+    content = models.TextField(verbose_name="Content")
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, verbose_name="Category")
+    image = models.ImageField(upload_to='posts/', blank=True, null=True, verbose_name="Image")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    view_count = models.PositiveIntegerField(default=0, verbose_name="Görüntülenme Sayısı")
+    view_count = models.PositiveIntegerField(default=0, verbose_name="Number of Views")
 
     class Meta:
         ordering = ['-created_at']
-        verbose_name = "Gönderi"
-        verbose_name_plural = "Gönderiler"
+        verbose_name = "Post"
+        verbose_name_plural = "Posts"
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -57,13 +57,13 @@ class Post(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-    content = models.TextField(verbose_name="Yorum")
+    content = models.TextField(verbose_name="Comment")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-created_at']
-        verbose_name = "Yorum"
-        verbose_name_plural = "Yorumlar"
+        verbose_name = "Comment"
+        verbose_name_plural = "Comments"
 
     def _str_(self):
         return f"{self.user.username} - {self.post.title}"
@@ -72,13 +72,13 @@ class Comment(models.Model):
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
-    is_like = models.BooleanField(default=True, verbose_name="Beğeni")
+    is_like = models.BooleanField(default=True, verbose_name="Like")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('user', 'post')
-        verbose_name = "Beğeni"
-        verbose_name_plural = "Beğeniler"
+        verbose_name = "Like"
+        verbose_name_plural = "Likes"
 
     def _str_(self):
         return f"{self.user.username} - {'Like' if self.is_like else 'Dislike'} - {self.post.title}"
@@ -91,8 +91,8 @@ class Follow(models.Model):
 
     class Meta:
         unique_together = ('follower', 'following')
-        verbose_name = "Takip"
-        verbose_name_plural = "Takipçiler"
+        verbose_name = "Follower"
+        verbose_name_plural = "Followers"
 
     def _str_(self):
         return f"{self.follower.username} → {self.following.username}"
