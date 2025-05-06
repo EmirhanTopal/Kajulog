@@ -67,9 +67,31 @@
     </style>
 </head>
 <body>
+    <div>
+            {% if user.is_authenticated %}
+            Merhaba {{ user.username }} |
+        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+            {% csrf_token %}
+        <button type="submit" style="background: none; border: none; color: #00796b; cursor: pointer;">
+            Çıkış
+        </button>
+        </form>
+            {% else %}
+            <a href="{% url 'login' %}">Giriş Yap</a>
+            <a href="{% url 'signup' %}">Kayıt Ol</a>
+            {% endif %}
+      </div>
+    </div>
     <div class="container">
         <h1>Gönderiler</h1>
-
+        <form method="get" action="{% url 'post_list' %}" style="text-align: center; margin: 20px 0;">
+            <input type="text" name="q" placeholder="Başlık ara..." value="{{ query|default:'' }}"
+                   style="padding: 8px; width: 60%; max-width: 400px; border-radius: 8px; border: 1px solid #ccc;">
+            <button type="submit"
+                    style="padding: 8px 16px; background-color: #00796b; color: white; border: none; border-radius: 8px; margin-left: 10px;">
+                Ara
+            </button>
+        </form>
         {% if posts %}
             {% for post in posts %}
                 <div class="post">
@@ -82,5 +104,15 @@
             <div class="no-posts">Henüz hiç gönderi yok.</div>
         {% endif %}
     </div>
+</body>
+<body>
+    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+        <a href="{% url 'post_list' %}" style="text-decoration: none;">Tümü</a>
+        <a href="?category=book">Kitap</a>
+        <a href="?category=article">Makale</a>
+        <a href="?category=recipe">Yemek Tarifi</a>
+        <a href="?category=movie">Film</a>
+        <a href="?category=activity">Spor Aktivitesi</a>
+      </div>
 </body>
 </html>

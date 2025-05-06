@@ -1,0 +1,40 @@
+<!-- templates/login.html -->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Giriş Yap</title>
+    <style>
+        body { font-family: Arial; background: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .login-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        input {
+            width: 100%; padding: 10px; margin: 10px 0;
+            border: 1px solid #ccc; border-radius: 5px;
+        }
+        button {
+            width: 100%; background: #00796b; color: white;
+            padding: 10px; border: none; border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>Giriş Yap</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Giriş</button>
+        </form>
+    </div>
+    <p style="text-align:center; margin-top:10px;">
+        Hesabın yok mu? <a href="{% url 'signup' %}">Kayıt Ol</a>
+    </p>
+</body>
+
+</html>

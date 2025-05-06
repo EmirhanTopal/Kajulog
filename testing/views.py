@@ -3,10 +3,33 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from .models import Post, Comment, Like
 from .forms import CommentForm
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
 
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()  # kullanıcıyı oluştur ama login olmasın
+            return redirect('login')  # login sayfasına yönlendir
+    else:
+        form = UserCreationForm()
+    return render(request, 'signup.html', {'form': form})
+
+@login_required
 def post_list(request):
+    query = request.GET.get('q')
+    category = request.GET.get('category')
+    
     posts = Post.objects.all()
-    return render(request, 'post_list.html', {'posts': posts})
+
+    if query:
+        posts = posts.filter(title__icontains=query)
+    
+    if category:
+        posts = posts.filter(category=category)
+
+    return render(request, 'post_list.html', {'posts': posts, 'query': query, 'category': category})
 
 def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
