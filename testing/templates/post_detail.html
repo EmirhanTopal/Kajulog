@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="eng">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{{ post.title }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            background-color: #f5f5f5cb;
             padding: 30px;
         }
 
@@ -30,7 +30,12 @@
             margin-bottom: 20px;
         }
 
-        .content {
+        .post-content {
+            background-color: #fafafa;
+            padding: 20px;
+            border-left: 4px solid #00796b;
+            border-right: 4px solid #00796b;
+            border-radius: 8px;
             margin-bottom: 40px;
             font-size: 16px;
             line-height: 1.6;
@@ -40,17 +45,42 @@
             margin-top: 40px;
         }
 
-        .comment {
-            border-bottom: 1px solid #ddd;
-            padding: 10px 0;
+        .comments h2 {
+            margin-bottom: 15px;
+            color: #333;
         }
 
-        .comment:last-child {
-            border-bottom: none;
+        .comment {
+            background-color: #f0f0f0;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .comment p {
+            margin: 0;
+        }
+
+        .comment strong {
+            color: #00796b;
+        }
+
+        .comment-form {
+            margin-top: 30px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.05);
+        }
+
+        .comment-form h3 {
+            margin-top: 0;
+            color: #444;
         }
 
         form {
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         input, textarea {
@@ -59,6 +89,13 @@
             margin-top: 8px;
             border-radius: 5px;
             border: 1px solid #ccc;
+            font-size: 15px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+
+        textarea {
+            resize: none;
+            height: 100px;
         }
 
         button {
@@ -96,7 +133,7 @@
                <strong>Views:</strong> {{ post.view_count }}</p>
         </div>
 
-        <div class="content">
+        <div class="post-content">
             {{ post.content|linebreaks }}
         </div>
 
