@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+            padding: 0;
+            margin: 0;
+        }
+
+        .navbar {
+            background-color: #00796b;
+            font-size: 22px;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+        }
+
+        .navbar form {
+            display: inline;
+        }
+
+        .navbar button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .category-bar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            background-color: #e0f2f1;
+            padding: 10px 0;
+        }
+
+        .category-bar a {
+            text-decoration: none;
+            color: #00796b;
+            padding: 8px 16px;
+            margin: 5px;
+            border: 1px solid #00796b;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .category-bar a:hover {
+            background-color: #00796b;
+            color: white;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .search-bar {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            width: 60%;
+            max-width: 400px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .post-card {
+            background-color: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .post-card h2 {
+            margin: 0 0 10px 0;
+            color: #00796b;
+        }
+
+        .post-card p {
+            color: #555;
+            margin: 10px 0 15px 0;
+        }
+
+        .detail-button {
+            padding: 8px 16px;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+
+        .detail-button:hover {
+            background-color: #005b4f;
+        }
+
+        .no-posts {
+            text-align: center;
+            padding: 50px;
+            color: #888;
+            font-style: italic;
+        }
+
+        .user-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .username {
+            margin-right: 88%;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .logout-form {
+            display: inline;
+        }
+
+        .logout-button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #005b4f;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div>
+            <strong><a href="{% url 'post_list' %}" style="color: white;">KAJULOG</a></strong>
+        </div>
+    </div>
+    <div>
+            {% if user.is_authenticated %}
+            <div class="user-bar">
+                <span class="username">Hello, {{ user.username }}</span>
+                <form action="{% url 'logout' %}" method="post" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">Log out</button>
+                </form>
+            </div>
+            {% endif %}
+      </div>
+    </div>
+
+    <div class="category-bar">
+        <a href="{% url 'post_list' %}">All</a>
+        <a href="?category=book">Books</a>
+        <a href="?category=article">Articles</a>
+        <a href="?category=recipe">Food & Recipes</a>
+        <a href="?category=movie">Movies</a>
+        <a href="?category=activity">Sport Activities</a>
+    </div>
+
+    <div class="container">
+        <div class="search-bar">
+            <form method="get" action="{% url 'post_list' %}">
+                <input type="text" name="q" placeholder="Search..." value="{{ query|default:''}}">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        {% if posts %}
+            {% for post in posts %}
+                <div class="post-card">
+                    <h2>{{ post.title }}</h2>
+                    <p>{{ post.content|truncatewords:30 }}</p>
+                    <a href="{% url 'post_detail' slug=post.slug %}" class="detail-button">See More</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-posts">No posts found. Wanna create one?</div>
+        {% endif %}
+    </div>
+    <div>
+        <a href="{% url 'create_post' %}" style="
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #00796b;
+    color: white;
+    font-size: 32px;
+    text-align: center;
+    line-height: 60px;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);">+</a>
+    </div>
+</body>
+</html>

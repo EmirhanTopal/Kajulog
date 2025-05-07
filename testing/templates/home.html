@@ -13,6 +13,21 @@
   </style>
 </head>
 <body>
+  <!-- Kullanıcı menüsü -->
+  <div style="text-align: right; padding: 10px 20px;">
+    {% if user.is_authenticated %}
+      Merhaba, {{ user.username }} |
+      <form action="{% url 'logout' %}" method="post" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" style="background: none; border: none; color: #00796b; cursor: pointer;">
+          Çıkış
+        </button>
+      </form>
+    {% else %}
+      <a href="{% url 'login' %}">Giriş Yap</a> |
+      <a href="{% url 'signup' %}">Kayıt Ol</a>  {# ← bunu birazdan ekleyeceğiz #}
+    {% endif %}
+  </div>
   <div class="container">
     {% for post in posts %}
     <div class="post">

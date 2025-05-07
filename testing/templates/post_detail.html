@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.title }}</title>
+    {% if post.image %}
+        <div style="margin-bottom: 20px;">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 100%; height: auto; border-radius: 8px;">
+        </div>
+    {% endif %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5cb;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: white;
+            padding: 30px 40px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #00796b;
+            margin-bottom: 10px;
+        }
+
+        .meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .post-content {
+            background-color: #fafafa;
+            padding: 20px;
+            border-left: 4px solid #00796b;
+            border-right: 4px solid #00796b;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .comments {
+            margin-top: 40px;
+        }
+
+        .comments h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .comment {
+            background-color: #f0f0f0;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .comment p {
+            margin: 0;
+        }
+
+        .comment strong {
+            color: #00796b;
+        }
+
+        .comment-form {
+            margin-top: 30px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.05);
+        }
+
+        .comment-form h3 {
+            margin-top: 0;
+            color: #444;
+        }
+
+        form {
+            margin-top: 15px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+
+        textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        button {
+            background-color: #00796b;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005b4f;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: #00796b;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ post.title }}</h1>
+        <div class="meta">
+            <p><strong>Writer:</strong> {{ post.author.username }} |
+               <strong>Category:</strong> {{ post.get_category_display }} |
+               <strong>Views:</strong> {{ post.view_count }}</p>
+        </div>
+
+        <div class="post-content">
+            {{ post.content|linebreaks }}
+        </div>
+
+        <div class="comments">
+            <h2>Comments</h2>
+            {% if comments %}
+                {% for comment in comments %}
+                    <div class="comment">
+                        <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No comments yet.</p>
+            {% endif %}
+        </div>
+
+        <div class="comment-form">
+            <h3>Write Comment</h3>
+            <form method="post" action="{% url 'add_comment' post.slug %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Send</button>
+            </form>
+        </div>
+
+        <a href="{% url 'post_list' %}" class="back-link">← All Posts</a>
+    </div>
+</body>
+</html>
