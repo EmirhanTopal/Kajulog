@@ -265,6 +265,21 @@
             <div class="no-posts">No posts found. Wanna create one?</div>
         {% endif %}
     </div>
-
+    <div>
+        <a href="{% url 'create_post' %}" style="
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #00796b;
+    color: white;
+    font-size: 32px;
+    text-align: center;
+    line-height: 60px;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);">+</a>
+    </div>
 </body>
 </html>
