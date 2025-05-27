@@ -1,31 +1,61 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="eng">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=Jersey+10&family=Pixelify+Sans:wght@400..700&family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+
 <head>
     <meta charset="UTF-8">
     <title>Home Page</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f1f1f1;
+            font-family: Pixelify Sans, sans-serif;
+            background-color: #000;
             padding: 0;
             margin: 0;
         }
 
         .navbar {
-            background-color: #00796b;
-            font-size: 22px;
-            color: white;
+            background-color: #000000;
+            background-image: url("{% static 'images/sparkle.gif' %}");
+            position: relative;
+            z-index: 1;
+            font-size: 30px;
+            color: #7b0d61;
             padding: 15px 30px;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-wrap: wrap;
+            font-family: 'Silkscreen';
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .navbar::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); /* Adjust alpha for transparency */
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .navbar > * {
+            position: relative;
+            z-index: 3;
         }
 
         .navbar a {
-            color: white;
+            color: #7b0d61;
             text-decoration: none;
             margin-left: 15px;
+            text-shadow:
+                -1px -1px 0 #4c083c,
+                1px -1px 0 #4c083c,
+                -1px  1px 0 #4c083c,
+                1px  1px 0 #4c083c;
         }
 
         .navbar form {
@@ -35,7 +65,7 @@
         .navbar button {
             background: none;
             border: none;
-            color: white;
+            color: #7b0d61;
             cursor: pointer;
             margin-left: 10px;
         }
@@ -44,23 +74,24 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            background-color: #e0f2f1;
+            background-color: #7b0d61;
             padding: 10px 0;
         }
 
         .category-bar a {
             text-decoration: none;
-            color: #00796b;
+            color: #000000;
             padding: 8px 16px;
             margin: 5px;
-            border: 1px solid #00796b;
+            border: 1px solid #000000;
             border-radius: 20px;
             transition: all 0.3s ease;
         }
 
         .category-bar a:hover {
-            background-color: #00796b;
+            background-color: #590246;
             color: white;
+            border: 1px solid white
         }
 
         .container {
@@ -132,18 +163,36 @@
 
         .user-bar {
             display: flex;
+            background-image: url("{% static 'images/sparkle.gif' %}");
+            position: relative;
+            z-index: 1;
             justify-content: center;
             align-items: center;
             padding: 10px 20px;
-            background-color: #f5f5f5;
-            font-family: Arial, sans-serif;
+            background-color: #000;
+            font-family: 'Press Start 2P', 'cursive';
             border-bottom: 1px solid #ddd;
         }
 
+        .user-bar::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); /* Adjust alpha for transparency */
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .user-bar > * {
+            position: relative;
+            z-index: 3;
+}
+
         .username {
             margin-right: 88%;
-            font-weight: bold;
-            color: #333;
+            color: #ffffff;
+            font-family: 'Press Start 2P', 'cursive';
+            font-size: 12px;
         }
 
         .logout-form {
@@ -151,18 +200,19 @@
         }
 
         .logout-button {
-            background-color: #00796b;
-            color: white;
-            border: none;
+            background-color: #000;
+            color: #34EDF3;
+            border: 0.3px solid #f5f5f5;
             padding: 6px 12px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 14px;
             transition: background-color 0.3s ease;
+            font-family: 'Press Start 2P', 'cursive';
         }
 
         .logout-button:hover {
-            background-color: #005b4f;
+            background-color: #590246;
         }
 
     </style>
@@ -170,7 +220,7 @@
 <body>
     <div class="navbar">
         <div>
-            <strong><a href="{% url 'post_list' %}" style="color: white;">KAJULOG</a></strong>
+            <strong><a href="{% url 'post_list' %}">KAJULOG</a></strong>
         </div>
     </div>
     <div>
