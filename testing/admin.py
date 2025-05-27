@@ -2,7 +2,9 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from .models import Profile, Post, Comment, Like, Follow, Tag, Notification, SavedPost, Report
+from .models import Activity
 
+admin.site.register(Activity)
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
     list_display = ('reporter', 'post', 'reason', 'created_at')

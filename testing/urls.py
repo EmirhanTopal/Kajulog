@@ -25,6 +25,14 @@ urlpatterns = [
     path('toggle-like/<slug:slug>/', views.toggle_like, name='toggle_like'),
     path('delete-comment/', views.delete_comment, name='delete_comment'),
 
+    path('profile/<slug:slug>/followers/', views.followers_list, name='followers_list'),
+    path('profile/<slug:slug>/following/', views.following_list, name='following_list'),
+    path('post/<slug:slug>/edit/', views.edit_post, name='edit_post'),
+
+    path('tags/<str:tag_name>/', views.posts_by_tag, name='posts_by_tag'),
+
+
+
 
 ]
 

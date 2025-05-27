@@ -1,0 +1,10 @@
+<h2>Posts tagged with "{{ tag.name }}"</h2>
+{% for post in posts %}
+    <div class="post-card">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content|truncatewords:20 }}</p>
+        <a href="{{ post.get_absolute_url }}">Read More</a>
+    </div>
+{% empty %}
+    <p>No posts found with this tag.</p>
+{% endfor %}

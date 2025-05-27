@@ -262,40 +262,33 @@
         <a href="?category=movie">Movies</a>
         <a href="?category=activity">Sport Activities</a>
     </div>
-
-    <div class="container">
-    <div class="search-bar">
-        <form method="get" action="{% url 'post_list' %}" style="display: flex; align-items: center; justify-content: center;">
-            <input type="text" name="q" placeholder="Search..." value="{{ query|default:'' }}">
-            <input type="hidden" name="type" value="{{ filter_type|default:'all' }}" id="filterTypeInput">
-            <button type="submit">Search</button>
-        </form>
-
-        {% if search_made %}
-        <div style="margin-top: 10px; display: flex; justify-content: center; gap: 10px;">
-            <button onclick="setFilter('all')" style="border: 2px solid blue; color: blue; background: transparent; padding: 5px 10px; border-radius: 5px;">All</button>
-            <button onclick="setFilter('users')" style="border: 2px solid green; color: green; background: transparent; padding: 5px 10px; border-radius: 5px;">Users</button>
-            <button onclick="setFilter('posts')" style="border: 2px solid red; color: red; background: transparent; padding: 5px 10px; border-radius: 5px;">Posts</button>
-        </div>
-        {% endif %}
-    </div>
-
-    <script>
-        function setFilter(type) {
-            document.getElementById('filterTypeInput').value = type;
-            document.querySelector('.search-bar form').submit();
-        }
-    </script>
-
-    {% if users %}
-        <h3 style="color: green;">Users</h3>
-        {% for user in users %}
-            <div class="post-card">
-                <h2><a href="{% url 'profile_detail' slug=user.profile.slug %}">{{ user.username }}</a></h2>
-            </div>
+   <div class="tags-bar" style="margin-top: 20px; padding: 10px; background-color: #7b0d61; border-radius: 10px;">
+    <h3 style="color: white; text-align: center;">Tags</h3>
+    <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
+        {% for tag in tags %}
+            <a href="{% url 'posts_by_tag' tag.name %}" style="background: #000; color: #fff; padding: 5px 15px; border-radius: 20px; text-decoration: none;">{{ tag.name }}</a>
+        {% empty %}
+            <p style="color: white;">No tags found.</p>
         {% endfor %}
-    {% endif %}
-
+    </div>
+</div>
+    <div class="container">
+        <!-- KUTUCUKLAR BURADA BAŞLIYOR -->
+        <div class="search-bar">
+            <form method="get" action="{% url 'post_list' %}" style="display: flex; align-items: center; justify-content: center;">
+                <input type="text" name="q" placeholder="Search..." value="{{ query|default:'' }}">
+                <input type="hidden" name="type" value="{{ filter_type|default:'all' }}" id="filterTypeInput">
+                <button type="submit">Search</button>
+            </form>
+    
+            {% if search_made %}
+            <div style="margin-top: 10px; display: flex; justify-content: center; gap: 10px;">
+                <button onclick="setFilter('all')" style="border: 2px solid blue; color: blue; background: transparent; padding: 5px 10px; border-radius: 5px;">All</button>
+                <button onclick="setFilter('users')" style="border: 2px solid green; color: green; background: transparent; padding: 5px 10px; border-radius: 5px;">Users</button>
+                <button onclick="setFilter('posts')" style="border: 2px solid red; color: red; background: transparent; padding: 5px 10px; border-radius: 5px;">Posts</button>
+            </div>
+            {% endif %}
+        </div>
     {% if posts %}
         <h3 style="color: red;">Posts</h3>
         {% for post in posts %}
@@ -305,12 +298,51 @@
                 <a href="{% url 'post_detail' slug=post.slug %}" class="detail-button">See More</a>
             </div>
         {% endfor %}
-    {% else %}
-        {% if search_made %}
-            <div class="no-posts">No posts found. Wanna create one?</div>
-        {% endif %}
     {% endif %}
+    <div class="activity-box" style="border: 3px solid green; border-radius: 15px; padding: 15px; margin: 20px 0;">
+    <h3>Son Etkinlikler</h3>
+    <ul>
+        {% for activity in activities %}
+            <li>
+                <strong>{{ activity.user.username }}</strong> {{ activity.get_action_display }}
+                {% if activity.post %}
+                    <a href="{{ activity.post.get_absolute_url }}">postuna</a>
+                {% elif activity.target_user %}
+                    <a href="{% url 'profile_detail' slug=activity.target_user.profile.slug %}">kullanıcıya</a>
+                {% endif %}
+                - {{ activity.timestamp|date:"H:i d M Y" }}
+            </li>
+        {% empty %}
+            <li>Henüz etkinlik yok.</li>
+        {% endfor %}
+    </ul>
 </div>
+
+    <div class="popular-posts-box" style="border: 3px solid blue; border-radius: 15px; padding: 15px; margin: 20px 0;">
+        <h3>Popüler Postlar (Son 1 Hafta)</h3>
+        <ul>
+            {% for post in popular_posts %}
+                <li>
+                    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a> - {{ post.likes.count }} beğeni
+                </li>
+            {% empty %}
+                <li>Henüz popüler post yok.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- KUTUCUKLAR BURADA BİTİYOR -->
+
+    <!-- Postlar listeleniyor -->
+    
+
+    <script>
+        function setFilter(type) {
+            document.getElementById('filterTypeInput').value = type;
+            document.querySelector('.search-bar form').submit();
+        }
+    </script>
+</div>
+
 
 
 

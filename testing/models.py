@@ -2,11 +2,36 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.urls import reverse
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
 
 # --- MODELLER ---
 
-profile_picture = models.ImageField(upload_to='profiles/', blank=True, null=True, default='profiles/default.jpg')
+class Activity(models.Model):
+    ACTION_CHOICES = [
+        ('like', 'Beğendi'),
+        ('comment', 'Yorum Yaptı'),
+        ('follow', 'Takip Etti'),
+        ('post', 'Post Paylaştı'),
+    ]
 
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    action = models.CharField(max_length=20, choices=ACTION_CHOICES)
+    target_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='target_user', null=True, blank=True)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, null=True, blank=True)
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.user.username} {self.get_action_display()} - {self.timestamp}"
+
+class Follow(models.Model):
+    follower = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
+    following = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+profile_picture = models.ImageField(upload_to='profiles/', blank=True, null=True, default='profiles/default.jpg')
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -42,7 +67,7 @@ class Profile(models.Model):
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
-    def _str_(self):
+    def __str__(self):
         return self.name
 
 
@@ -74,9 +99,17 @@ class Post(models.Model):
         verbose_name = "Post"
         verbose_name_plural = "Posts"
 
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
+
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            base_slug = slugify(self.title)
+            unique_slug = base_slug
+            counter = 1
+            while Post.objects.filter(slug=unique_slug).exists():
+                unique_slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = unique_slug
         super().save(*args, **kwargs)
 
     def _str_(self):

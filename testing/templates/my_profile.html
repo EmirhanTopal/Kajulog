@@ -11,8 +11,11 @@
 
 <p>{{ profile.bio|default:"Bio eklemedin." }}</p>
 
-<p>Takipçi: {{ followers }} | Takip Edilen: {{ following }}</p>
 <p>Toplam Gönderi: {{ posts|length }}</p>
+<p>
+    <a href="{% url 'followers_list' slug=profile.slug %}">Takipçi:</a> {{ profile.followers_count }} |
+    <a href="{% url 'following_list' slug=profile.slug %}">Takip Edilen:</a> {{ profile.following_count }}
+</p>
 
 <a href="{% url 'edit_profile' %}" class="btn btn-warning">Profili Düzenle</a>
 
@@ -26,3 +29,5 @@
 </ul>
 
 <a href="{% url 'post_list' %}" class="btn btn-secondary mt-2">← Anasayfaya Dön</a>
+
+
