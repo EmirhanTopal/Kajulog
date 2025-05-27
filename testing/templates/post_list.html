@@ -223,18 +223,36 @@
             <strong><a href="{% url 'post_list' %}">KAJULOG</a></strong>
         </div>
     </div>
+
     <div>
-            {% if user.is_authenticated %}
-            <div class="user-bar">
-                <span class="username">Hello, {{ user.username }}</span>
-                <form action="{% url 'logout' %}" method="post" class="logout-form">
-                    {% csrf_token %}
-                    <button type="submit" class="logout-button">Log out</button>
-                </form>
-            </div>
-            {% endif %}
-      </div>
+        <a href="{% url 'create_post' %}" style="
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #00796b;
+        color: white;
+        font-size: 32px;
+        text-align: center;
+        line-height: 60px;
+        text-decoration: none;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);">+</a>
     </div>
+
+    {% if user.is_authenticated %}
+    <div class="user-bar">
+        <span class="username">Hello, {{ user.username }}</span>
+        <a href="{% url 'profile_detail' slug=user.profile.slug %}" class="logout-button" style="margin-left: 20px;">
+            Profile
+        </a>
+        <form action="{% url 'logout' %}" method="post" class="logout-form" style="margin-left: 10px;">
+            {% csrf_token %}
+            <button type="submit" class="logout-button">Log out</button>
+        </form>
+        </div>
+    {% endif %}
 
     <div class="category-bar">
         <a href="{% url 'post_list' %}">All</a>
@@ -246,40 +264,55 @@
     </div>
 
     <div class="container">
-        <div class="search-bar">
-            <form method="get" action="{% url 'post_list' %}">
-                <input type="text" name="q" placeholder="Search..." value="{{ query|default:''}}">
-                <button type="submit">Search</button>
-            </form>
-        </div>
+    <div class="search-bar">
+        <form method="get" action="{% url 'post_list' %}" style="display: flex; align-items: center; justify-content: center;">
+            <input type="text" name="q" placeholder="Search..." value="{{ query|default:'' }}">
+            <input type="hidden" name="type" value="{{ filter_type|default:'all' }}" id="filterTypeInput">
+            <button type="submit">Search</button>
+        </form>
 
-        {% if posts %}
-            {% for post in posts %}
-                <div class="post-card">
-                    <h2>{{ post.title }}</h2>
-                    <p>{{ post.content|truncatewords:30 }}</p>
-                    <a href="{% url 'post_detail' slug=post.slug %}" class="detail-button">See More</a>
-                </div>
-            {% endfor %}
-        {% else %}
-            <div class="no-posts">No posts found. Wanna create one?</div>
+        {% if search_made %}
+        <div style="margin-top: 10px; display: flex; justify-content: center; gap: 10px;">
+            <button onclick="setFilter('all')" style="border: 2px solid blue; color: blue; background: transparent; padding: 5px 10px; border-radius: 5px;">All</button>
+            <button onclick="setFilter('users')" style="border: 2px solid green; color: green; background: transparent; padding: 5px 10px; border-radius: 5px;">Users</button>
+            <button onclick="setFilter('posts')" style="border: 2px solid red; color: red; background: transparent; padding: 5px 10px; border-radius: 5px;">Posts</button>
+        </div>
         {% endif %}
     </div>
-    <div>
-        <a href="{% url 'create_post' %}" style="
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: #00796b;
-    color: white;
-    font-size: 32px;
-    text-align: center;
-    line-height: 60px;
-    text-decoration: none;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);">+</a>
-    </div>
+
+    <script>
+        function setFilter(type) {
+            document.getElementById('filterTypeInput').value = type;
+            document.querySelector('.search-bar form').submit();
+        }
+    </script>
+
+    {% if users %}
+        <h3 style="color: green;">Users</h3>
+        {% for user in users %}
+            <div class="post-card">
+                <h2><a href="{% url 'profile_detail' slug=user.profile.slug %}">{{ user.username }}</a></h2>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if posts %}
+        <h3 style="color: red;">Posts</h3>
+        {% for post in posts %}
+            <div class="post-card">
+                <h2>{{ post.title }}</h2>
+                <p>{{ post.content|truncatewords:30 }}</p>
+                <a href="{% url 'post_detail' slug=post.slug %}" class="detail-button">See More</a>
+            </div>
+        {% endfor %}
+    {% else %}
+        {% if search_made %}
+            <div class="no-posts">No posts found. Wanna create one?</div>
+        {% endif %}
+    {% endif %}
+</div>
+
+
+
 </body>
 </html>

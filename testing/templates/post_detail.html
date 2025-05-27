@@ -3,15 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ post.title }}</title>
-    {% if post.image %}
-        <div style="margin-bottom: 20px;">
-            <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 100%; height: auto; border-radius: 8px;">
-        </div>
-    {% endif %}
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f5f5f5cb;
+            background-color: #f5f5f5;
             padding: 30px;
         }
 
@@ -24,137 +19,124 @@
             border-radius: 10px;
         }
 
-        h1 {
-            color: #00796b;
-            margin-bottom: 10px;
-        }
+        h1 { color: #00796b; }
+        .meta { color: #666; font-size: 14px; margin-bottom: 20px; }
+        .post-content { background-color: #fafafa; padding: 20px; border-left: 4px solid #00796b; border-right: 4px solid #00796b; border-radius: 8px; margin-bottom: 40px; }
 
-        .meta {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        .post-content {
-            background-color: #fafafa;
-            padding: 20px;
-            border-left: 4px solid #00796b;
-            border-right: 4px solid #00796b;
-            border-radius: 8px;
-            margin-bottom: 40px;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-
-        .comments {
-            margin-top: 40px;
-        }
-
-        .comments h2 {
-            margin-bottom: 15px;
-            color: #333;
-        }
+        .comments h2 { margin-top: 40px; color: #333; }
 
         .comment {
+            position: relative;
             background-color: #f0f0f0;
             padding: 12px 16px;
             border-radius: 8px;
             margin-bottom: 15px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
-        .comment p {
-            margin: 0;
-        }
-
-        .comment strong {
+        .edit-icon {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            cursor: pointer;
+            font-size: 14px;
             color: #00796b;
+            display: none;
         }
 
-        .comment-form {
-            margin-top: 30px;
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.05);
+        .comment:hover .edit-icon {
+            display: inline;
         }
 
-        .comment-form h3 {
-            margin-top: 0;
-            color: #444;
+        .comment input[type="text"] {
+            width: 80%;
+            padding: 5px;
+            margin-right: 5px;
         }
 
-        form {
-            margin-top: 15px;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 8px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 15px;
-            font-family: Georgia, 'Times New Roman', Times, serif;
-        }
-
-        textarea {
-            resize: none;
-            height: 100px;
-        }
-
-        button {
-            background-color: #00796b;
+        .comment button.save-btn {
+            background: #00796b;
             color: white;
-            padding: 10px 20px;
-            margin-top: 10px;
             border: none;
-            border-radius: 5px;
+            padding: 4px 8px;
+            border-radius: 4px;
             cursor: pointer;
         }
 
-        button:hover {
-            background-color: #005b4f;
-        }
+        .comment strong { color: #00796b; }
 
-        .back-link {
-            display: inline-block;
-            margin-top: 30px;
-            text-decoration: none;
-            color: #00796b;
-        }
+        .comment-form { margin-top: 30px; background-color: #f9f9f9; padding: 20px; border-radius: 8px; }
 
-        .back-link:hover {
-            text-decoration: underline;
-        }
+        .back-link { display: inline-block; margin-top: 30px; text-decoration: none; color: #00796b; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>{{ post.title }}</h1>
+        <button id="like-btn" onclick="toggleLike('{{ post.slug }}')"
+        style="background-color: #00796b; color: white; padding: 6px 12px; border: none; border-radius: 5px; cursor: pointer;">
+        Like
+        </button>
+        <p><strong>Likes:</strong> <span id="like-count">{{ post.likes.count }}</span></p>
+
         <div class="meta">
-            <p><strong>Writer:</strong> {{ post.author.username }} |
+            <p><strong>Writer:</strong> <a href="{% url 'profile_detail' slug=post.author.profile.slug %}">{{ post.author.username }}</a> |
                <strong>Category:</strong> {{ post.get_category_display }} |
                <strong>Views:</strong> {{ post.view_count }}</p>
+            <p><strong>Likes:</strong> {{ post.likes.count }}</p>
         </div>
 
         <div class="post-content">
             {{ post.content|linebreaks }}
         </div>
+            <script>
+                function toggleLike(slug) {
+                    if (!slug) {
+                        console.error("Slug is missing");
+                        return;
+                    }
+
+                    fetch(`/toggle-like/${slug}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const likeCountElement = document.getElementById('like-count');
+                            if (likeCountElement) {
+                                likeCountElement.textContent = data.like_count;
+                            }
+                        } else {
+                            console.error('Backend error:', data);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                }
+
+
+        </script>
 
         <div class="comments">
             <h2>Comments</h2>
-            {% if comments %}
-                {% for comment in comments %}
-                    <div class="comment">
-                        <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p>No comments yet.</p>
-            {% endif %}
+            {% for comment in comments %}
+                <div class="comment" data-comment-id="{{ comment.id }}">
+                    <strong>
+                        <a href="{% url 'profile_detail' slug=comment.user.profile.slug %}">
+                            {{ comment.user.username }}
+                        </a>
+                    </strong>:
+                    <span class="comment-text">{{ comment.content }}</span>
+
+                    {% if comment.user == request.user %}
+                        <span class="edit-icon" onclick="enableEdit(this)">✏️</span>
+                        <span class="delete-icon" onclick="deleteComment({{ comment.id }})">🗑️</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
         </div>
 
+        <h1>{{ post.title }}</h1>
         <div class="comment-form">
             <h3>Write Comment</h3>
             <form method="post" action="{% url 'add_comment' post.slug %}">
@@ -166,5 +148,80 @@
 
         <a href="{% url 'post_list' %}" class="back-link">← All Posts</a>
     </div>
+
+    <script>
+    function enableEdit(icon) {
+        const commentDiv = icon.closest('.comment');
+        const commentText = commentDiv.querySelector('.comment-text');
+        const originalText = commentText.textContent.trim();
+        const commentId = commentDiv.dataset.commentId;
+
+        commentText.outerHTML = `
+            <input type="text" value="${originalText}" id="edit-input-${commentId}">
+            <button class="save-btn" onclick="saveEdit(${commentId})">Save</button>
+        `;
+        icon.style.display = 'none';
+    }
+
+    function getCSRFToken() {
+        return '{{ csrf_token }}';  // Django'dan template içinde gelecek
+    }
+
+    function saveEdit(commentId) {
+        const newText = document.getElementById(`edit-input-${commentId}`).value;
+
+        fetch("{% url 'update_comment' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken(),
+            },
+            body: JSON.stringify({
+                comment_id: commentId,
+                content: newText
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert(data.error || 'Error updating comment.');
+            }
+        });
+    }
+</script>
+<script>
+    function deleteComment(commentId) {
+    if (!confirm('Bu yorumu silmek istediğinizden emin misiniz?')) {
+        return;
+    }
+
+    fetch("{% url 'delete_comment' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken(),
+        },
+        body: JSON.stringify({ comment_id: commentId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const commentDiv = document.querySelector(`.comment[data-comment-id="${commentId}"]`);
+            if (commentDiv) {
+                commentDiv.remove();
+            }
+        } else {
+            alert(data.error || 'Yorum silinemedi.');
+        }
+    })
+    .catch(error => {
+        console.error('Hata:', error);
+        alert('Bir hata oluştu.');
+    });
+}
+</script>
+
 </body>
 </html>
