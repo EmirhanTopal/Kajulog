@@ -1,14 +1,158 @@
-
 {% load static %}
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=Jersey+10&family=Pixelify+Sans:wght@400..700&family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+
+<style>
+
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    body {
+        font-family: Pixelify Sans, sans-serif;
+        background-color: #000000;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+    }
+
+    .headbar {
+        background-color: #000000;
+        background-image: url("{% static 'images/sparkle.gif' %}");
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        font-size: 12px;
+        color: #7b0d61;
+        padding: 5px 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        font-family: 'Silkscreen', cursive;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .headbar::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 1;
+        pointer-events: none;
+
+    }
+
+    .headbar > * {
+        position: relative;
+        z-index: 3;
+    }
+
+    .edit-profile-container {
+        max-width: 600px;
+        margin: 3rem auto;
+        background: #000000;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 100px;
+        outline: 2px solid #4895ef;
+    }
+
+    h2 {
+        color: #4895ef;
+        margin-bottom: 1.5rem;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    form p {
+        margin-bottom: 1.2rem;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 0.3rem;
+    }
+
+    input[type="text"],
+    input[type="file"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 0.6rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-sizing: border-box;
+        font-size: 1rem;
+    }
+
+    button[type="submit"] {
+        background-color: #4895ef;
+        color: white;
+        border: none;
+        padding: 0.7rem 1.5rem;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: background-color 0.3s ease;
+        font-family: Pixelify Sans, sans-serif;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #3F37C9;
+    }
+
+    .btn-secondary {
+        display: inline-block;
+        background-color: #f72585;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        text-decoration: none;
+        margin-top: 1rem;
+        transition: background-color 0.3s ease;
+        justify-content: space-between;
+    }
+
+    .btn-secondary:hover {
+        background-color: #b5179e;
+    }
+
+    .mt-2 {
+        margin-top: 1rem;
+        justify-content: space-between;
+    }
+
+</style>
+
 {% block content %}
-<h2>Profilini Düzenle</h2>
+<div class="headbar">
+    <h1>Edit Your Profile</h1>
+</div>
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Kaydet</button>
-</form>
+<div class="edit-profile-container">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
 
-<a href="{% url 'my_profile' %}" class="btn btn-secondary mt-2">İptal</a>
+    <a href="{% url 'my_profile' %}" class="btn btn-secondary mt-2">Cancel</a>
+    <a href="{% url 'post_list' %}" class="btn btn-secondary mt2">Home Page</a>
+</div>
+
+
 {% endblock %}

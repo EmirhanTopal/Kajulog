@@ -1,5 +1,90 @@
 {% load static %}
 
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        color: #333;
+        padding: 2rem;
+    }
+
+    h2, h3 {
+        color: #00796b;
+        margin-bottom: 0.5rem;
+    }
+
+    img {
+        border-radius: 50%;
+        margin-bottom: 1rem;
+        border: 3px solid #005b4f;
+    }
+
+    p {
+        margin: 0.5rem 0;
+    }
+
+    .profile-container {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        font-weight: bold;
+        text-decoration: none;
+        border-radius: 10px;
+        margin-top: 1rem;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-warning {
+        background-color: #ff9800;
+        color: white;
+        border: none;
+    }
+
+    .btn-warning:hover {
+        background-color: #e68900;
+    }
+
+    .btn-secondary {
+        background-color: #005b4f;
+        color: white;
+        border: none;
+    }
+
+    .btn-secondary:hover {
+        background-color: #004138;
+    }
+
+    ul {
+        padding-left: 1.5rem;
+    }
+
+    li {
+        margin-bottom: 0.5rem;
+    }
+
+    a {
+        color: #00796b;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+
+
+
+
+</style>
+
 <h2>Merhaba, {{ profile.user.username }}!</h2>
 
 {% if profile.profile_picture %}

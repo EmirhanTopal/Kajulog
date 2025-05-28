@@ -1,6 +1,120 @@
 {% extends "base.html" %}
 {% load static %}
 
+<DOCTYPE html>
+<html lang="en">
+
+{% block extra_css %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .profile-container {
+        max-width: 700px;
+        margin: 3rem auto;
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h2, h3 {
+        color: #00796b;
+        margin-bottom: 1rem;
+    }
+
+    img {
+        width: 150px;
+        border-radius: 50%;
+        border: 3px solid #005b4f;
+        margin-bottom: 1rem;
+    }
+
+    p {
+        margin: 0.5rem 0;
+    }
+
+    ul {
+        list-style-type: disc;
+        margin-left: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    li {
+        margin-bottom: 0.5rem;
+    }
+
+    a {
+        color: #00796b;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    /* Butonlar */
+    .btn {
+        display: inline-block;
+        padding: 0.5rem 1.2rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    .btn-secondary {
+        background-color: #005b4f;
+        color: white;
+        margin-right: 0.5rem;
+    }
+
+    .btn-secondary:hover {
+        background-color: #004438;
+    }
+
+    .mt-2 {
+        margin-top: 1rem;
+    }
+
+</style>
+{% endblock %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ profile_user.username }} Profil Sayfası</title>
+</head>
+
+
+
+<body>
 {% block content %}
 <h2>{{ profile_user.username }} Profil Sayfası</h2>
 
@@ -38,5 +152,6 @@
 <a href="{% url 'post_list' %}" class="btn btn-secondary mt-2">← Anasayfaya Dön</a>
 <a href="{% url 'my_profile' %}" class="btn btn-secondary mt-2">Kendi Profiline Dön</a>
 {% endblock %}
+</body>
 
-
+</html>
