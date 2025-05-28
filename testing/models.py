@@ -31,8 +31,6 @@ class Follow(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
-profile_picture = models.ImageField(upload_to='profiles/', blank=True, null=True, default='profiles/default.jpg')
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
@@ -41,10 +39,16 @@ class Profile(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.user.username)
+            base_slug = slugify(self.user.username)
+            slug = base_slug
+            count = 1
+            while Profile.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{count}"
+                count += 1
+            self.slug = slug
         super().save(*args, **kwargs)
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.user.username}'s Profile"
 
     @property
@@ -99,8 +103,6 @@ class Post(models.Model):
         verbose_name = "Post"
         verbose_name_plural = "Posts"
 
-    slug = models.SlugField(max_length=200, unique=True, blank=True)
-
     def save(self, *args, **kwargs):
         if not self.slug:
             base_slug = slugify(self.title)
@@ -112,7 +114,7 @@ class Post(models.Model):
             self.slug = unique_slug
         super().save(*args, **kwargs)
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.title} - {self.author.username}"
 
     def get_absolute_url(self):
@@ -134,7 +136,7 @@ class Comment(models.Model):
         verbose_name = "Comment"
         verbose_name_plural = "Comments"
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.user.username} - {self.post.title}"
 
 
@@ -149,7 +151,7 @@ class Like(models.Model):
         verbose_name = "Like"
         verbose_name_plural = "Likes"
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.user.username} - {'Like' if self.is_like else 'Dislike'} - {self.post.title}"
 
 
@@ -163,7 +165,7 @@ class Follow(models.Model):
         verbose_name = "Follower"
         verbose_name_plural = "Followers"
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.follower.username} → {self.following.username}"
 
 
@@ -178,7 +180,7 @@ class Report(models.Model):
     reason = models.CharField(max_length=20, choices=REPORT_REASONS)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.reporter.username} reported {self.post.title} ({self.reason})"
 
 
@@ -190,7 +192,7 @@ class SavedPost(models.Model):
     class Meta:
         unique_together = ('user', 'post')
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.user.username} saved {self.post.title}"
 
 
@@ -200,5 +202,5 @@ class Notification(models.Model):
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.user.username} - {self.message}"

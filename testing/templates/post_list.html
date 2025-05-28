@@ -303,11 +303,13 @@
         <h3 style="color: green;">Users</h3>
         <ul>
             {% for user in users %}
-                <li>
-                    <a href="{% url 'profile_detail' slug=user.profile.slug %}">
-                        {{ user.username }}
-                    </a>
-                </li>
+                {% if user.profile and user.profile.slug %}
+                    <li>
+                        <a href="{% url 'profile_detail' slug=user.profile.slug %}">
+                            {{ user.username }}
+                        </a>
+                    </li>
+                {% endif %}
             {% endfor %}
         </ul>
     {% endif %}
