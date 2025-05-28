@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h2>{{ profile_user.username }} Profil Sayfası</h2>
+
+{% if profile.profile_picture %}
+    <img src="{{ profile.profile_picture.url }}" alt="Profil Fotoğrafı" width="150">
+{% else %}
+    <p>Profil fotoğrafı bulunamadı.</p>
+{% endif %}
+
+<p>{{ profile.bio|default:"Henüz bio eklenmemiş." }}</p>
+
+<p>Toplam Gönderi: {{ profile.post_count }}</p>
+<p>
+    <a href="{% url 'followers_list' slug=profile.slug %}">Takipçi:</a> {{ profile.followers_count }} |
+    <a href="{% url 'following_list' slug=profile.slug %}">Takip Edilen:</a> {{ profile.following_count }}
+</p>
+
+{% if not request.user == profile_user %}
+    {% if is_following %}
+        <a href="{% url 'toggle_follow' profile_user.username %}" class="btn btn-danger">Takibi Bırak</a>
+    {% else %}
+        <a href="{% url 'toggle_follow' profile_user.username %}" class="btn btn-success">Takip Et</a>
+    {% endif %}
+{% endif %}
+
+<h3>Gönderiler</h3>
+<ul>
+    {% for post in posts %}
+        <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+    {% empty %}
+        <li>Henüz gönderi yok.</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'post_list' %}" class="btn btn-secondary mt-2">← Anasayfaya Dön</a>
+<a href="{% url 'my_profile' %}" class="btn btn-secondary mt-2">Kendi Profiline Dön</a>
+{% endblock %}
+
+

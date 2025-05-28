@@ -1,0 +1,15 @@
+<h2>{{ profile_user.username }} Kullanıcısının Takip Ettikleri</h2>
+
+<ul>
+    {% for follow in following %}
+        <li>
+            <a href="{% url 'profile_detail' slug=follow.following.profile.slug %}">
+                {{ follow.following.username }}
+            </a>
+        </li>
+    {% empty %}
+        <li>Henüz kimseyi takip etmiyor.</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'profile_detail' slug=profile_user.profile.slug %}">← Profiline Dön</a>
