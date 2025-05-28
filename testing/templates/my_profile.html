@@ -1,35 +1,182 @@
 {% load static %}
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=Jersey+10&family=Pixelify+Sans:wght@400..700&family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+
 <style>
+
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
     body {
-        font-family: Arial, sans-serif;
-        background-color: #f2f2f2;
-        color: #333;
+        font-family: Pixelify Sans, sans-serif;
+        background-color: #000000;
+        color: #ffffff;
         padding: 2rem;
+        background-image: url("{% static 'images/speed.gif' %}");
+    }
+
+    .headbar {
+        background-color: #000000;
+        background-image: url("{% static 'images/sparkle.gif' %}");
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        font-size: 15px;
+        color: #7b0d61;
+        padding: 5px 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        font-family: 'Silkscreen', cursive;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        border-bottom: #7b0d61 2px solid;
+    }
+
+    .headbar::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .headbar > * {
+        position: relative;
+        z-index: 3;
     }
 
     h2, h3 {
-        color: #00796b;
+        color: #7b0d61;
         margin-bottom: 0.5rem;
     }
 
-    img {
-        border-radius: 50%;
+    .profile-container {
+        max-width: 600px;
+        margin: 3rem auto;
+        background: #000000;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 100px;
+        outline: 2px solid #4895ef;
+        justify-content: center;
+        display: flex;
+    }
+
+    /* Sol taraf */
+    .profile-left {
+        flex: 1 1 250px;
+        max-width: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    /* Sağ taraf */
+    .profile-right {
+        flex: 2 1 500px;
+        display: flex;
+        flex-direction: column;
+        max-height: 500px;
+        padding-right: 10px;
+    }
+
+    .profile-right h3 {
         margin-bottom: 1rem;
-        border: 3px solid #005b4f;
+    }
+
+    .profile-right ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
+    }
+
+    .profile-right li {
+        margin-bottom: 0.5rem;
+        border-bottom: 1px solid #333;
+        padding-bottom: 4px;
+    }
+
+    /* Başlığı sabitle */
+    .posts-header {
+        position: sticky;
+        top: 0;
+        background-color: #000;
+        z-index: 2;
+        border-bottom: 1px solid #4895ef;
+        overflow: none;
+    }
+
+    /* Post listesi scroll edilsin */
+    .scrollable-posts {
+        margin-top: 2px;
+        overflow-y: auto;
+        flex: 1;
+        padding-right: 5px; /* Scroll bar sıkışmasın diye */
+    }
+
+    .scrollable-posts ul {
+        padding-left: 1.2rem;
+    }
+
+    .scrollable-posts li {
+        margin-bottom: 0.5rem;
+    }
+
+    /* Firefox için */
+    .scrollable-posts {
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #000 #000; /* thumb (çubuk) ve track (arka plan) siyah */
+    }
+
+    /* WebKit tarayıcılar için (Chrome, Safari, Edge) */
+    .scrollable-posts::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .scrollable-posts::-webkit-scrollbar-track {
+        background: #000; /* Track siyah */
+    }
+
+    .scrollable-posts::-webkit-scrollbar-thumb {
+        background-color: #000;  /* Thumb da siyah */
+        border-radius: 6px;
+        border: 2px solid #4895ef; /* Mavi kenarlık */
+    }
+
+
+    .image-wrapper {
+        width: 150px;
+        height: 150px;
+        border: 3px solid #7b0d61;
+        border-radius: 10px; /* Kare köşeler için 0 yapabilirsin */
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f0f0f0; /* İstersen arka plan rengi */
+
+    }
+
+    .image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Resmi çerçeveye sığdırır, taşan yerleri kırpar */
     }
 
     p {
         margin: 0.5rem 0;
-    }
-
-    .profile-container {
-        background-color: white;
-        padding: 2rem;
-        border-radius: 15px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        max-width: 600px;
-        margin: auto;
     }
 
     .btn {
@@ -43,23 +190,23 @@
     }
 
     .btn-warning {
-        background-color: #ff9800;
+        background-color: #7b0d61;
         color: white;
         border: none;
     }
 
     .btn-warning:hover {
-        background-color: #e68900;
+        background-color: #570745;
     }
 
     .btn-secondary {
-        background-color: #005b4f;
+        background-color: #7b0d61;
         color: white;
         border: none;
     }
 
     .btn-secondary:hover {
-        background-color: #004138;
+        background-color: #570745;
     }
 
     ul {
@@ -71,7 +218,7 @@
     }
 
     a {
-        color: #00796b;
+        color: #7b0d61;
         text-decoration: none;
     }
 
@@ -85,34 +232,52 @@
 
 </style>
 
-<h2>Merhaba, {{ profile.user.username }}!</h2>
+<div class="headbar">
+    <h2>Hello, {{ profile.user.username }}!</h2>
+</div>
 
-{% if profile.profile_picture %}
-    <img src="{{ profile.profile_picture.url }}" alt="Profil Resmi" width="150">
-{% else %}
-    <p>Profil fotoğrafı bulunamadı.</p>
-    <img src="{% static 'images/clouds.gif' %}" alt="Varsayılan Profil Resmi" width="150">
-{% endif %}
 
-<p>{{ profile.bio|default:"Bio eklemedin." }}</p>
+<div class="profile-container">
+    
+    <div class="profile-left">
+        <div class="image-wrapper">
+            {% if profile.profile_picture %}
+                <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" width="150">
+            {% else %}
+                <img src="{% static 'images/default.jpeg' %}" alt="Default Profile Picture" width="150">
+            {% endif %}
+        </div>
 
-<p>Toplam Gönderi: {{ posts|length }}</p>
-<p>
-    <a href="{% url 'followers_list' slug=profile.slug %}">Takipçi:</a> {{ profile.followers_count }} |
-    <a href="{% url 'following_list' slug=profile.slug %}">Takip Edilen:</a> {{ profile.following_count }}
-</p>
+        <p>{{ profile.bio|default:"No bio." }}</p>
 
-<a href="{% url 'edit_profile' %}" class="btn btn-warning">Profili Düzenle</a>
+        <p>Total Posts: {{ posts|length }}</p>
+        <p>
+            <a href="{% url 'followers_list' slug=profile.slug %}">Follower:</a> {{ profile.followers_count }} |
+            <a href="{% url 'following_list' slug=profile.slug %}">Following:</a> {{ profile.following_count }}
+        </p>
 
-<h3>Gönderilerin</h3>
-<ul>
-    {% for post in posts %}
-        <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
-    {% empty %}
-        <li>Henüz gönderi yok.</li>
-    {% endfor %}
-</ul>
+        <a href="{% url 'edit_profile' %}" class="btn btn-warning">Edit Your Profile</a>
+        <a href="{% url 'post_list' %}" class="btn btn-secondary mt-2">← Return Home Page</a>
 
-<a href="{% url 'post_list' %}" class="btn btn-secondary mt-2">← Anasayfaya Dön</a>
+    </div>
 
+    <div class="profile-right">
+        <div class="posts-header">
+            <h3>Your Posts</h3>
+        </div>
+        <div class="scrollable-posts">
+            <ul>
+                {% for post in posts %}
+                    <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+                {% empty %}
+                    <li>No Posts here.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>    
+
+</div>
+
+    
+</div>
 
