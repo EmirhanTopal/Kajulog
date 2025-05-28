@@ -7,6 +7,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=Jersey+10&family=Pixelify+Sans:wght@400..700&family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
     <style>
+
+
         body {
             background-color: #000;
             font-family: 'Silkscreen', cursive;
@@ -14,8 +16,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            height: 90vh;
+            margin: 10px;
+            padding: 10px;
         }
 
         .form-container {
@@ -27,7 +30,78 @@
             max-width: 600px;
             width: 90%;
             z-index: 2;
+            margin-bottom: 20px;
         }
+
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #fff;
+            font-family: 'Silkscreen', cursive;
+        }
+
+        select[multiple] {
+            height: 90px;
+            background-color: #111;
+            border: 1px solid #4895ef;
+            color: #fff;
+            border-radius: 8px;
+            padding: 10px;
+            font-family: 'Pixelify Sans', sans-serif;
+            box-shadow: inset 0 0 5px #4895ef;
+        }
+
+
+        select {
+            width: 100%;
+            padding: 10px;
+            background-color: #111;
+            border: 1px solid #4895ef;
+            color: #fff;
+            border-radius: 8px;
+            box-shadow: inset 0 0 5px #4895ef;
+            font-family: 'Pixelify Sans', sans-serif;
+        }
+
+        select[multiple], .tag-select {
+            background-color: #111;
+            border: 1px solid #4895ef;
+            color: #fff;
+            border-radius: 8px;
+            box-shadow: inset 0 0 5px #4895ef;
+            font-family: 'Pixelify Sans', sans-serif;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .row-flex {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .input-group {
+            flex: 1;
+            min-width: 250px;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #7b0d61;
+        }
+
+
+
 
         h2 {
             text-align: center;
@@ -97,10 +171,38 @@
         <h2>New Post</h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}
+
+            <div class="form-group">
+                <label for="id_title">Title</label>
+                {{ form.title }}
+            </div>
+
+            <div class="form-group">
+                <label for="id_content">Content</label>
+                {{ form.content }}
+            </div>
+
+            <div class="row-flex">
+                <div class="input-group">
+                    {{ form.category.label_tag }}
+                    {{ form.category }}
+                </div>
+                
+                <div class="input-group">
+                    {{ form.tags.label_tag }}
+                    {{ form.tags }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_image">Image</label>
+                {{ form.image }}
+            </div>
+
             <button type="submit">Create a Post</button>
         </form>
     </div>
+
 
     <div class="home-link">
         <a href="{% url 'post_list' %}" class="btn btn-secondary mt-2">← Return Home Page</a>

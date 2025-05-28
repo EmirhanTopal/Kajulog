@@ -6,7 +6,10 @@ class PostForm(forms.ModelForm):
     tags = forms.ModelMultipleChoiceField(
         queryset=Tag.objects.all(),
         required=False,
-        widget=forms.CheckboxSelectMultiple
+        widget=forms.SelectMultiple(attrs={
+            'class': 'tag-select',
+            'size': 6  # İsteğe göre yüksekliğini ayarlayabilirsin
+        })
     )
 
     class Meta:
