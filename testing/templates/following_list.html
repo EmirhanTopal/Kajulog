@@ -1,15 +1,232 @@
-<h2>{{ profile_user.username }} Kullanıcısının Takip Ettikleri</h2>
+{% load static %}
 
-<ul>
-    {% for follow in following %}
-        <li>
-            <a href="{% url 'profile_detail' slug=follow.following.profile.slug %}">
-                {{ follow.following.username }}
-            </a>
-        </li>
-    {% empty %}
-        <li>Henüz kimseyi takip etmiyor.</li>
-    {% endfor %}
-</ul>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=Jersey+10&family=Pixelify+Sans:wght@400..700&family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
 
-<a href="{% url 'profile_detail' slug=profile_user.profile.slug %}">← Profiline Dön</a>
+<style>
+    body {
+        background-color: #000000;
+        background-image: url("{% static 'images/heeart.gif' %}");
+        background-repeat: no-repeat;     /* Tek GIF göster, tekrar etmesin */
+        background-size: cover;           /* Alanı tamamen kaplasın, orantıyı koruyarak büyür */
+        background-position: center; /* GIF tam ortada dursun */
+        font-family: 'Press Start 2P', cursive;
+        color: #333;
+        margin: 0;
+        padding: 1rem;
+        padding-top: 82px;
+    }
+
+    body::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.2);
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .headbar {
+        background-color: #000000;
+        background-image: url("{% static 'images/sparkle.gif' %}");
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        font-size: 12px;
+        color: #adadad;
+        padding: 5px 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        font-family: 'Silkscreen', cursive;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        border-bottom: #adadad 2px solid;
+    }
+
+    .headbar::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .headbar > * {
+        position: relative;
+        z-index: 3;
+    }
+
+    .headbar-title {
+        font-family: 'Silkscreen', cursive;
+        color: #7b0d61;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        margin-left: 15px;
+    }
+    /* Genel başlık stili */
+    h2 {
+        font-family: 'Silkscreen', cursive;
+        color: #7b0d61;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .following-list {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 1rem;
+        background-color: rgba(255, 255, 255, 0.1); /* Hafif transparan beyaz */
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgb(255, 255, 255);
+        border: 1px solid white;
+    }
+
+    .following-item {
+        margin-bottom: 10px;
+    }
+
+    .following-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background-color: rgba(255,255,255,0.05);
+        padding: 8px;
+        border-radius: 8px;
+        transition: background 0.2s;
+    }
+
+    .following-info:hover {
+        background-color: rgba(123,13,97,0.1); /* hover efekti */
+    }
+
+    .following-info img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #7b0d61;
+    }
+
+    .following-info span {
+        font-size: 14px;
+        color: #fff;
+        font-family: 'Silkscreen', cursive;
+    }
+
+    /* Liste kutusu */
+    ul {
+        max-width: 400px;
+        margin: 0 auto 2rem auto;
+        padding-left: 0;
+        list-style: none;
+        background-color: #000000cc; /* Hafif transparan siyah */
+        border: 2px solid #adadad;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #adadad;
+        max-height: 300px;
+        overflow-y: auto;
+        text-align: center;
+    }
+
+    /* Liste elemanları */
+    ul li {
+        padding: 0.7rem 1rem;
+        border-bottom: 1px solid #333;
+        font-family: 'Pixelify Sans', sans-serif;
+        color: #ffffff;
+        font-size: 25px;
+    }
+
+    /* Son eleman alt sınır kaldır */
+    ul li:last-child {
+        border-bottom: none;
+    }
+
+    /* Linkler */
+    ul li a {
+        color: #ffffff;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    ul li a:hover {
+        text-decoration: underline;
+        color: #adadad;
+    }
+
+    /* Boş liste mesajı */
+    ul li:empty {
+        font-style: italic;
+        color: #999;
+        text-align: center;
+    }
+
+    /* Profiline dön linki */
+    .return-link {
+        display: inline-block;
+        margin: 0 auto;
+        padding: 0.5rem 1rem;
+        background-color: #ffffff;
+        color: white;
+        border-radius: 10px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+        justify-content: left;
+        margin-right: 20px;
+        color: #7b0d61;
+    }
+
+    .return-link:hover {
+        background-color: #adadad;
+        color: #7b0d61;
+    }
+
+    /* Responsive küçük ekranlarda ortala */
+    @media (max-width: 480px) {
+        ul {
+            max-width: 90vw;
+            max-height: 250px;
+        }
+    }
+
+</style>
+
+<div class="headbar">
+    <div class="headbar-title">
+        <h2>{{ profile_user.username }} 's Followings</h2>
+    </div>
+    <div class="return-link">
+        <a href="{% url 'profile_detail' slug=profile_user.profile.slug %}">← Return to Profile Page</a>
+    </div>
+</div>
+
+<div class="following-list">
+    <ul>
+        {% for follow in following %}
+            <li class="following-item">
+                <a href="{% url 'profile_detail' slug=follow.follower.profile.slug %}">
+                    <div class="following-info">
+                        {% if follow.following.profile.profile_picture %}
+                            <img src="{{ follow.following.profile.profile_picture.url }}" alt="{{ follow.following.username }}'s picture">
+                        {% else %}
+                            <img src="{% static 'images/default.jpeg' %}" alt="Default picture">
+                        {% endif %}
+                        <span>{{ follow.following.username }}</span>
+                    </div>
+                </a>
+            </li>
+        {% empty %}
+            <li>Hasn't followed anyone yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+
+
