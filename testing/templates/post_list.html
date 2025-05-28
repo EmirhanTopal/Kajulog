@@ -299,6 +299,18 @@
             </div>
         {% endfor %}
     {% endif %}
+    {% if users %}
+        <h3 style="color: green;">Users</h3>
+        <ul>
+            {% for user in users %}
+                <li>
+                    <a href="{% url 'profile_detail' slug=user.profile.slug %}">
+                        {{ user.username }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     <div class="activity-box" style="border: 3px solid green; border-radius: 15px; padding: 15px; margin: 20px 0;">
     <h3>Son Etkinlikler</h3>
     <ul>
@@ -329,12 +341,7 @@
                 <li>Henüz popüler post yok.</li>
             {% endfor %}
         </ul>
-    </div>
-    <!-- KUTUCUKLAR BURADA BİTİYOR -->
-
-    <!-- Postlar listeleniyor -->
-    
-
+    </div>    
     <script>
         function setFilter(type) {
             document.getElementById('filterTypeInput').value = type;
@@ -342,9 +349,5 @@
         }
     </script>
 </div>
-
-
-
-
 </body>
 </html>

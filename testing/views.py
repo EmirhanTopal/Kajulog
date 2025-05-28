@@ -245,8 +245,6 @@ def post_list(request):
     query = request.GET.get('q')
     filter_type = request.GET.get('type', 'all') 
     category = request.GET.get('category') 
-    one_week_ago = timezone.now() - timedelta(days=7)
-
 
     posts = Post.objects.all()
     users = User.objects.all()
@@ -257,11 +255,8 @@ def post_list(request):
     if query:
         posts = posts.filter(Q(title__icontains=query) | Q(content__icontains=query))
         users = users.filter(username__icontains=query)
-    else:
-        users = User.objects.none()
-        if filter_type != 'all':
-            posts = Post.objects.none()
 
+    # Filtre butonu seçimi
     if filter_type == 'users':
         posts = Post.objects.none()
     elif filter_type == 'posts':
@@ -287,6 +282,7 @@ def post_list(request):
     }
 
     return render(request, 'post_list.html', context)
+
 
 def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
@@ -322,6 +318,10 @@ def signup(request):
             form.save()
             messages.success(request, "Kayıt başarıyla oluşturuldu, giriş yapabilirsin.")
             return redirect('login')
+        else:
+            # Form geçerli değilse aynı sayfayı hata mesajları ile göster
+            return render(request, 'signup.html', {'form': form})
     else:
         form = UserCreationForm()
         return render(request, 'signup.html', {'form': form})
+
