@@ -16,6 +16,7 @@
             padding: 0;
             margin: 0;
             color: #fff;
+            background-color: #000;
         }
 
         html, body {
@@ -26,42 +27,42 @@
         }
 
         .navbar {
-            background-color: #000000;
+            background-color: #000;
             background-image: url("{% static 'images/sparkle.gif' %}");
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             z-index: 1000;
-            font-size: 30px;
-            color: #7b0d61;
             padding: 15px 30px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             flex-wrap: wrap;
             font-family: 'Silkscreen', cursive;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
         }
 
         .navbar::before {
             content: "";
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 2;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
             pointer-events: none;
         }
 
         .navbar > * {
             position: relative;
-            z-index: 3;
+            z-index: 2;
         }
 
-        .navbar a {
+        /* Navbar başlık */
+        .navbar strong a {
+            font-size: 26px;
             color: #7b0d61;
             text-decoration: none;
-            margin-left: 15px;
             text-shadow:
                 -1px -1px 0 #4c083c,
                 1px -1px 0 #4c083c,
@@ -69,45 +70,49 @@
                 1px  1px 0 #4c083c;
         }
 
-        .navbar form {
-            display: inline;
+        /* Kullanıcı çubuğu */
+        .user-bar {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            max-width: 100%;
+            margin-right: 40px;
         }
 
-        .navbar button {
-            background: none;
-            border: none;
-            color: #7b0d61;
-            cursor: pointer;
-            margin-left: 10px;
-        }
+        /* Kullanıcı adı */
         .username {
-            margin-right: 0;
-            margin-left: 10px;
             color: #ffffff;
-            font-family: 'Press Start 2P', cursive;
             font-size: 12px;
+            font-family: 'Press Start 2P', cursive;
+            white-space: nowrap;
         }
 
-        .logout-form {
-            display: inline;
-        }
-
-        .logout-button {
+        /* Butonlar */
+        .navbar-button {
             background-color: #000;
             color: #34EDF3;
-            border: 0.3px solid #f5f5f5;
+            border: 1px solid #34EDF3;
             padding: 6px 12px;
             border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
+            font-size: 12px;
             font-family: 'Press Start 2P', cursive;
-            margin-right: 35px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-decoration: none;
         }
 
-        .logout-button:hover {
+        .navbar-button:hover {
             background-color: #590246;
+            transform: scale(1.05);
         }
+
+        /* Logout formunun görünümünü bozma */
+        .logout-form {
+            margin: 0;
+        }
+
 
         .category-bar {
             display: flex;
@@ -144,6 +149,7 @@
             margin: 0;
             padding: 0;
             color: #fff;
+            background-color: #000;
         }
 
         .search-bar {
@@ -159,13 +165,15 @@
             width: 60%;
             max-width: 400px;
             border-radius: 20px;
-            border: 1px solid #ccc;
+            border: 1px solid #590246;
             font-size: 16px;
+            color: #fff;
+            background-color: #000;
         }
 
         .search-bar button {
             padding: 10px 20px;
-            background-color: #00796b;
+            background-color: #7b0d61;
             color: white;
             border: none;
             border-radius: 20px;
@@ -175,32 +183,33 @@
         }
 
         .search-bar button:hover {
-            background-color: #005b4f;
+            background-color: #590246;
         }
 
         .post-card {
-            background-color: white;
+            background-color: black;
             padding: 25px;
             margin-bottom: 20px;
             border-radius: 10px;
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
             color: #000;
+            border: 2px solid #4895ef;
         }
 
         .post-card h2 {
             margin: 0 0 10px 0;
-            color: #00796b;
+            color: #fff;
             font-weight: bold;
         }
 
         .post-card p {
-            color: #555;
+            color: #6d6d6d;
             margin: 10px 0 15px 0;
         }
 
         .detail-button {
             padding: 8px 16px;
-            background-color: #00796b;
+            background-color: #4895ef;
             color: white;
             border: none;
             border-radius: 6px;
@@ -211,7 +220,7 @@
         }
 
         .detail-button:hover {
-            background-color: #005b4f;
+            background-color: #4361ee;
         }
 
         .no-posts {
@@ -242,38 +251,34 @@
             min-width: 180px;
             max-width: 400px;
             height: 100%;
-            background: #fff;
+            background: #000;
             border-radius: 12px;
             box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-            color: #222;
+            color: #fff;
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
 
         .left-column {
-            width: 20vw;
-            min-width: 200px;
-            max-width: 350px;
+            width: 40vw;
             height: 100%;
-            background: #fff;
+            background: #000;
             border-radius: 12px 0 0 12px;
             box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-            color: #222;
+            color: #fff;
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
 
         .center-column {
-            width: 30vw;
-            min-width: 300px;
-            max-width: 700px;
+            width: 60vw;
             height: 100%;
-            background: #fff;
+            background: #000;
             border-radius: 0;
             box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-            color: #222;
+            color: #fff;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -283,11 +288,12 @@
         .center-column .search-bar {
             position: sticky;
             top: 0;
-            background: #fff;
+            background: #000;
             z-index: 2;
-            padding: 20px 0 10px 0;
-            margin-bottom: 0;
-            border-bottom: 1px solid #eee;
+            padding: 0px 0 40px 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #000;
+            overflow: hidden;
         }
 
         .center-column .posts-scroll {
@@ -306,14 +312,12 @@
         }
 
         .right-column {
-            width: 20vw;
-            min-width: 200px;
-            max-width: 350px;
+            width: 40vw;
             height: 100%;
-            background: #fff;
+            background: #000;
             border-radius: 0 12px 12px 0;
             box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-            color: #222;
+            color: #fff;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -321,7 +325,6 @@
 
         .left-column > div,
         .right-column > div {
-            overflow-y: auto;
             flex: 1 1 auto;
             min-height: 0;
             padding: 15px;
@@ -356,11 +359,13 @@
         }
         /* Tags Bar */
         .tags-bar {
-            background-color: #7b0d61;
+            background-color: #000;
+            border: 1px solid #4895ef;
             border-radius: 10px;
             padding: 15px 10px 20px 10px;
             margin-top: 20px;
             box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
 
         .tags-bar h3 {
@@ -408,12 +413,12 @@
         }
 
         .popular-posts-box ul {
-            color: black;
+            color: white;
         }
 
         .popular-posts-box h3 {
             margin-top: 0;
-            color: #00796b;
+            color: #4895EF;
             font-weight: bold;
         }
 
@@ -460,23 +465,22 @@
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div>
-            <strong><a href="{% url 'post_list' %}">KAJULOG</a></strong>
-        </div>
-        {% if user.is_authenticated %}
-        <div class="user-bar">
-            <span class="username">Hello, {{ user.username }}</span>
-            <a href="{% url 'profile_detail' slug=user.profile.slug %}" class="logout-button">
-                Profile
-            </a>
-            <form action="{% url 'logout' %}" method="post" class="logout-form">
-                {% csrf_token %}
-                <button type="submit" class="logout-button">Log out</button>
-            </form>
-        </div>
-        {% endif %}
+<div class="navbar">
+    <strong><a href="{% url 'post_list' %}">KAJULOG</a></strong>
+
+    {% if user.is_authenticated %}
+    <div class="user-bar">
+        <span class="username">Hello, {{ user.username|upper }}</span>
+        <a href="{% url 'profile_detail' slug=user.profile.slug %}" class="navbar-button">Profile</a>
+        <form action="{% url 'logout' %}" method="post" class="logout-form">
+            {% csrf_token %}
+            <button type="submit" class="navbar-button">Log out</button>
+        </form>
     </div>
+    {% endif %}
+</div>
+
+
 
 <div>
   <a href="{% url 'create_post' %}" style="
@@ -519,7 +523,7 @@
 
     <!-- Sol Sütun: Popüler Postlar -->
     <div class="left-column">
-      <div class="popular-posts-box" style="border: 3px solid blue; border-radius: 15px; padding: 15px;">
+      <div class="popular-posts-box" style="border: 2px solid #4361EE; border-radius: 15px; padding: 15px;">
         <h3>Popüler Postlar (Son 1 Hafta)</h3>
         <ul>
           {% for post in popular_posts %}
@@ -544,9 +548,9 @@
 
         {% if search_made %}
         <div>
-          <button onclick="setFilter('all')" style="border: 2px solid blue; color: blue; background: transparent; padding: 5px 10px; border-radius: 5px;">All</button>
-          <button onclick="setFilter('users')" style="border: 2px solid green; color: green; background: transparent; padding: 5px 10px; border-radius: 5px;">Users</button>
-          <button onclick="setFilter('posts')" style="border: 2px solid red; color: red; background: transparent; padding: 5px 10px; border-radius: 5px;">Posts</button>
+          <button onclick="setFilter('all')" style="border: 2px solid #7b0d61; color: #7b0d61; background: transparent; padding: 5px 10px; border-radius: 5px;">All</button>
+          <button onclick="setFilter('users')" style="border: 2px solid #7b0d61; color: #7b0d61; background: transparent; padding: 5px 10px; border-radius: 5px;">Users</button>
+          <button onclick="setFilter('posts')" style="border: 2px solid #7b0d61; color: #7b0d61; background: transparent; padding: 5px 10px; border-radius: 5px;">Posts</button>
         </div>
         {% endif %}
       </div>
@@ -554,7 +558,7 @@
 
       <div class="posts-scroll">
         {% if posts %}
-        <h3 style="color: red;">Posts</h3>
+        <h3>Posts</h3>
         {% for post in posts %}
         <div class="post-card">
             <h2>{{ post.title }}</h2>
@@ -565,7 +569,7 @@
         {% endif %}
 
         {% if users %}
-        <h3 style="color: green;">Users</h3>
+        <h3>Users</h3>
         <ul>
             {% for user in users %}
             {% if user.profile and user.profile.slug %}
@@ -588,18 +592,18 @@
     <!-- Sağ Sütun: Tags + Son Etkinlikler -->
     <div class="right-column">
       
-      <div class="tags-bar" style="padding: 10px; background-color: #7b0d61; border-radius: 10px;">
+      <div class="tags-bar" style="padding: 10px; background-color: #000; border: 2px solid #4895ef; border-radius: 10px;">
         <h3 style="color: white; text-align: center;">Tags</h3>
         <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
           {% for tag in tags %}
-            <a href="{% url 'posts_by_tag' tag.name %}" style="background: #000; color: #fff; padding: 5px 15px; border-radius: 20px; text-decoration: none;">{{ tag.name }}</a>
+            <a href="{% url 'posts_by_tag' tag.name %}" style="border: 1px solid #4895ef;background: #000; color: #fff; padding: 5px 15px; border-radius: 20px; text-decoration: none;">{{ tag.name }}</a>
           {% empty %}
             <p style="color: white;">No tags found.</p>
           {% endfor %}
         </div>
       </div>
 
-      <div class="activity-box" style="border: 3px solid green; border-radius: 15px; padding: 15px;">
+      <div class="activity-box" style="border: 2px solid #4895ef; border-radius: 15px; padding: 15px;">
         <h3>Son Etkinlikler</h3>
         <ul>
           {% for activity in activities %}
