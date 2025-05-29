@@ -1,3 +1,103 @@
+{% load static %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=Jersey+10&family=Pixelify+Sans:wght@400..700&family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        background-color: #000;
+        font-family: 'Pixelify Sans', sans-serif;
+        color: #fff;
+        padding: 20px;
+        background-image: url("{% static 'images/speed.gif' %}");
+        background-size: cover;
+        background-attachment: fixed;
+    }
+
+    h2 {
+        color: #fdfdfd;
+        font-family: 'Pixelify Sans', sans-serif;
+        font-size: 40px;
+        margin-top: 20px; 
+        text-align: center;
+
+    }
+
+    .post-card {
+        background-color: rgba(0, 0, 0, 0.75);
+        border: 1px solid #34EDF3;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 30px auto;
+        width: 80%;
+        max-width: 700px;
+        box-shadow: 0 0 10px rgba(52, 237, 243, 0.3);
+        font-family: 'Press Start 2P', cursive;
+        color: #fff;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        font-size: 30px;
+    }
+
+    .post-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 16px rgba(123, 13, 97, 0.6);
+    }
+
+    .post-card h2 {
+        font-size: 32px;
+        color: #7b0d61;
+        margin-bottom: 15px;
+    }
+
+    .post-card p {
+        font-size: 12px;
+        color: #ddd;
+        margin-bottom: 15px;
+        line-height: 1.6;
+    }
+
+    .post-card a {
+        display: inline-block;
+        background-color: #000;
+        color: #34EDF3;
+        border: 1px solid #34EDF3;
+        padding: 6px 12px;
+        border-radius: 5px;
+        font-size: 10px;
+        font-family: 'Press Start 2P', cursive;
+        text-decoration: none;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .post-card a:hover {
+        background-color: #590246;
+        transform: scale(1.05);
+    }
+
+    .btn-secondary {
+        background-color: none;
+        color: white;
+    }
+    .btn-secondary:hover {
+        color: white;
+        transform: scale(1.05);
+    }
+
+    .no-posts-message {
+        text-align: center;
+        margin-top: 100px;
+        font-family: 'Silkscreen', cursive;
+        color: #ccc;
+        font-size: 16px;
+    }
+
+
+
+</style>
+
+<a href="{% url 'post_list' %}" class="btn btn-secondary mt-2">← Return Home Page</a>
+
 <h2>Posts tagged with "{{ tag.name }}"</h2>
 {% for post in posts %}
     <div class="post-card">
@@ -6,5 +106,7 @@
         <a href="{{ post.get_absolute_url }}">Read More</a>
     </div>
 {% empty %}
-    <p>No posts found with this tag.</p>
+    <p class="no-posts-message">No posts found with this tag.</p>
 {% endfor %}
+
+
