@@ -1,171 +1,443 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=Jersey+10&family=Pixelify+Sans:wght@400..700&family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+
 <head>
     <meta charset="UTF-8">
     <title>{{ post.title }}</title>
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            padding: 30px;
+            font-family: Pixelify Sans, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            padding: 2rem;
+            background-image: url("{% static 'images/speed.gif' %}");
         }
 
         .container {
             max-width: 800px;
             margin: auto;
-            background-color: white;
-            padding: 30px 40px;
+            background-color: #000;
+            padding: 10px 30px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             border-radius: 10px;
+            border: 1px solid #4895ef;
+            box-shadow: 0 0 15px #4895ef;
         }
 
-        h1 { color: #00796b; }
-        .meta { color: #666; font-size: 14px; margin-bottom: 20px; }
-        .post-content { background-color: #fafafa; padding: 20px; border-left: 4px solid #00796b; border-right: 4px solid #00796b; border-radius: 8px; margin-bottom: 40px; }
+        h1 { color: #4895ef; font-size: 40px;}
+        .meta { color: #a5a5a5; font-size: 14px; margin-bottom: 20px; }
+        .post-content { background-color: #000; padding: 20px; border-left: 4px solid #4895ef; border-right: 4px solid #4895ef; border-radius: 8px; margin-bottom: 40px; box-shadow: 0 0 10px #4895ef; }
 
-        .comments h2 { margin-top: 40px; color: #333; }
+        #like-btn:hover {
+            background-color: #7b0d61;
+            font-family: Pixelify Sans, sans-serif;
+        }
+
+        #like-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            font-family: Pixelify Sans, sans-serif;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            display: inline-block;
+            margin-right: 8px;
+            background-color: #eee;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        ul li a {
+            text-decoration: none;
+            color: #7b0d61;
+        }
+
+        ul li a:hover {
+            text-decoration: underline;
+        }
+
+
+        .comments {
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+            padding: 0 10px;
+            font-family: Pixelify Sans, sans-serif;
+        }
+
+        .comments h2 {
+            margin-bottom: 25px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.8rem;
+            border-bottom: 2px solid #7b0d61;
+            padding-bottom: 8px;
+        }
 
         .comment {
             position: relative;
-            background-color: #f0f0f0;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            background-color: #000;
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+            transition: background-color 0.3s ease;
+            border: 1px solid #4895ef;
         }
 
-        .edit-icon {
-            position: absolute;
-            right: 10px;
-            top: 10px;
-            cursor: pointer;
-            font-size: 14px;
+        .comment:hover {
+            background-color: #000;
+        }
+
+        .comment strong {
             color: #00796b;
-            display: none;
+            font-weight: 600;
         }
 
-        .comment:hover .edit-icon {
-            display: inline;
+        .comment-author {
+            text-decoration: none;
+            color: #4895ef;
+            transition: color 0.3s ease;
         }
+
+        .comment-author:hover {
+            color: #4895ef;
+            text-decoration: underline;
+        }
+
+        .comment-text {
+            margin-left: 6px;
+            font-size: 1rem;
+            line-height: 1.4;
+            color: #fff;
+        }
+
+        .edit-icon, .delete-icon {
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: #555;
+            margin-left: 12px;
+            user-select: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .comment:hover .edit-icon,
+        .comment:hover .delete-icon {
+            opacity: 1;
+        }
+
+        .edit-icon:hover {
+            font-family: Pixelify Sans, sans-serif;
+            color: #00796b;
+        }
+
+        .delete-icon:hover {
+            font-family: Pixelify Sans, sans-serif;
+            color: #b00020;
+        }
+
+        /* Edit input and buttons styling */
 
         .comment input[type="text"] {
-            width: 80%;
-            padding: 5px;
-            margin-right: 5px;
+            width: 75%;
+            padding: 8px 12px;
+            margin-right: 8px;
+            font-size: 1rem;
+            border: 1.5px solid #00796b;
+            border-radius: 6px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .comment input[type="text"]:focus {
+            border-color: #004d40;
+            box-shadow: 0 0 5px #004d40;
         }
 
         .comment button.save-btn {
-            background: #00796b;
+            background-color: #00796b;
             color: white;
             border: none;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 7px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .comment button.save-btn:hover {
+            background-color: #004d40;
+        }
+
+        /* Comment form styling */
+
+
+        .comment-form {
+            max-width: 700px;
+            margin: 40px auto 60px auto;
+            background-color: #000;
+            padding: 30px 35px;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+            font-family: Pixelify Sans, sans-serif;
+            color: #fff;
+        }
+
+        .comment-form h3 {
+            margin-bottom: 20px;
+            color: #7b0d61;
+            font-weight: 700;
+            font-size: 1.6rem;
+            border-bottom: 2px solid #7b0d61;
+            padding-bottom: 8px;
+        }
+
+        .comment-form form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .comment-form label {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .comment-form p {
+            margin-bottom: 12px;
+        }
+
+        .comment-form input[type="text"],
+        .comment-form textarea,
+        .comment-form select {
+            width: 100%;
+            background-color: #000;
+            color: #fff;
+            padding: 10px 14px;
+            border: 1.8px solid #4895ef;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .comment-form input[type="text"]:focus,
+        .comment-form textarea:focus,
+        .comment-form select:focus {
+            border-color: #3272ba;
+            outline: none;
+            box-shadow: 0 0 8px #3272ba;
+        }
+
+        .comment-form textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .submit-btn {
+            margin-top: 14px;
+            align-self: flex-start;
+            background-color: #7b0d61;
+            color: white;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-family:Pixelify Sans, sans-serif;
+        }
+
+        .submit-btn:hover {
+            background-color: #570745;
+        }
+
+        /* Eğer Select2 kullanıyorsan onun dropdown ve input alanına ek stil gerekebilir, gerekirse bildir. */
+
+
+
+        .edit-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            background-color: #7b0d61;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
             cursor: pointer;
         }
 
-        .comment strong { color: #00796b; }
+        .edit-button:hover {
+            background-color: #570745;
+        }
 
-        .comment-form { margin-top: 30px; background-color: #f9f9f9; padding: 20px; border-radius: 8px; }
+        .back-link { display: inline-block; margin-top: 0; text-decoration: none; color: #7b0d61; }
 
-        .back-link { display: inline-block; margin-top: 30px; text-decoration: none; color: #00796b; }
+        .post-image {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .post-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <button id="like-btn" onclick="toggleLike('{{ post.slug }}')"
-        style="background-color: #00796b; color: white; padding: 6px 12px; border: none; border-radius: 5px; cursor: pointer;">
-        Like
-        </button>
-        <p><strong>Likes:</strong> <span id="like-count">{{ post.likes.count }}</span></p>
 
-        <div class="meta">
-            <p><strong>Writer:</strong> <a href="{% url 'profile_detail' slug=post.author.profile.slug %}">{{ post.author.username }}</a> |
-               <strong>Category:</strong> {{ post.get_category_display }} |
-               <strong>Views:</strong> {{ post.view_count }}</p>
-            <p><strong>Likes:</strong> {{ post.likes.count }}</p>
-        </div>
-
-        <div class="post-content">
-            {{ post.content|linebreaks }}
-        </div>
-            <script>
-                function toggleLike(slug) {
-                    if (!slug) {
-                        console.error("Slug is missing");
-                        return;
-                    }
-
-                    fetch(`/toggle-like/${slug}/`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRFToken': '{{ csrf_token }}'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            const likeCountElement = document.getElementById('like-count');
-                            if (likeCountElement) {
-                                likeCountElement.textContent = data.like_count;
-                            }
-                        } else {
-                            console.error('Backend error:', data);
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-                }
-
-
-        </script>
-        {% if user == post.author %}
-            <a href="{% url 'edit_post' slug=post.slug %}" class="edit-button">Düzenle</a>
-        {% endif %}
-
-        <div class="comments">
-            <h2>Comments</h2>
-            {% for comment in comments %}
-                <div class="comment" data-comment-id="{{ comment.id }}">
-                    <strong>
-                        <a href="{% url 'profile_detail' slug=comment.user.profile.slug %}">
-                            {{ comment.user.username }}
-                        </a>
-                    </strong>:
-                    <span class="comment-text">{{ comment.content }}</span>
-
-                    {% if comment.user == request.user %}
-                        <span class="edit-icon" onclick="enableEdit(this)">✏️</span>
-                        <span class="delete-icon" onclick="deleteComment({{ comment.id }})">🗑️</span>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        </div>
-                    {% if post.tags.all %}
-                <h3>Tags:</h3>
-            <ul>
-            {% for tag in post.tags.all %}
-                <li>
-                    <a href="{% url 'posts_by_tag' tag.name %}" style="color: #7b0d61;">
-                        {{ tag.name }}
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-                {% else %}
-                    <p>No tags associated with this post.</p>
-                {% endif %}
-        <h1>{{ post.title }}</h1>
-        <div class="comment-form">
-            <h3>Write Comment</h3>
-            <form method="post" action="{% url 'add_comment' post.slug %}">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Send</button>
-            </form>
-        </div>
-
-        <a href="{% url 'post_list' %}" class="back-link">← All Posts</a>
+<div class="container">
+    <h1>{{ post.title }}</h1>
+    <div class="meta">
+        <p><strong>Writer:</strong> <a href="{% url 'profile_detail' slug=post.author.profile.slug %}">{{ post.author.username }}</a> |
+            <strong>Category:</strong> {{ post.get_category_display }} |
+            <strong>Views:</strong> {{ post.view_count }}</p>
+        <p><strong>Likes:</strong> {{ post.likes.count }}</p>
     </div>
 
+    <div class="post-content">
+        {{ post.content|linebreaks }}
+    </div>
+
+
+    {% if post.image %}
+      <div class="post-image">
+        <img src="{{ post.image.url }}" alt="{{ post.title }}" />
+      </div>
+    {% endif %}
+
     <script>
+        function toggleLike(slug) {
+            if (!slug) {
+                console.error("Slug is missing");
+                return;
+            }
+
+            fetch(`/toggle-like/${slug}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const likeCountElement = document.getElementById('like-count');
+                    if (likeCountElement) {
+                        likeCountElement.textContent = data.like_count;
+                    }
+                } else {
+                    console.error('Backend error:', data);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+    {% if user == post.author %}
+        <a href="{% url 'edit_post' slug=post.slug %}" class="edit-button">Edit</a>
+    {% endif %}
+
+    
+
+
+        <h3>Tags:</h3>
+        <ul>
+            {% if post.tags.all %}
+                {% for tag in post.tags.all %}
+                    <li>
+                        <a href="{% url 'posts_by_tag' tag.name %}" style="color: #7b0d61;">
+                            {{ tag.name }}
+                        </a>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li style="background-color: #f9f9f9; color: #aaa; font-style: italic;">No tags</li>
+            {% endif %}
+        </ul>
+
+        <p><strong>Likes:</strong> <span id="like-count">{{ post.likes.count }}</span></p>
+        <button id="like-btn" onclick="toggleLike('{{ post.slug }}')"
+        style="background-color: #7b0d61; color: white; padding: 6px 12px; border: none; border-radius: 5px; cursor: pointer; font-family: Pixelify Sans, sans-serif;">
+        Like
+        </button>
+        
+
+
+    <div class="comments">
+        <h2>Comments</h2>
+        {% for comment in comments %}
+            <div class="comment" data-comment-id="{{ comment.id }}">
+                <strong>
+                    <a href="{% url 'profile_detail' slug=comment.user.profile.slug %}" class="comment-author">
+                        {{ comment.user.username }}
+                    </a>
+                </strong>:
+                <span class="comment-text">{{ comment.content }}</span>
+
+                {% if comment.user == request.user %}
+                    <span class="edit-icon" onclick="enableEdit(this)" title="Edit comment" aria-label="Edit comment">✏️</span>
+                    <span class="delete-icon" onclick="deleteComment({{ comment.id }})" title="Delete comment" aria-label="Delete comment">🗑️</span>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    
+
+    <div class="comment-form">
+        <h3>Write Comment</h3>
+        <form method="post" action="{% url 'add_comment' post.slug %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="submit-btn">Send</button>
+        </form>
+    </div>
+
+
+    <a href="{% url 'post_list' %}" class="back-link">← All Posts</a>
+</div>
+
+<!-- Select2 için gerekli CSS & JS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#id_tags').select2({
+            placeholder: "Etiketleri seçin",
+            allowClear: true
+        });
+    });
+
     function enableEdit(icon) {
         const commentDiv = icon.closest('.comment');
         const commentText = commentDiv.querySelector('.comment-text');
@@ -180,7 +452,7 @@
     }
 
     function getCSRFToken() {
-        return '{{ csrf_token }}';  // Django'dan template içinde gelecek
+        return '{{ csrf_token }}';
     }
 
     function saveEdit(commentId) {
@@ -206,37 +478,36 @@
             }
         });
     }
-</script>
-<script>
-    function deleteComment(commentId) {
-    if (!confirm('Bu yorumu silmek istediğinizden emin misiniz?')) {
-        return;
-    }
 
-    fetch("{% url 'delete_comment' %}", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCSRFToken(),
-        },
-        body: JSON.stringify({ comment_id: commentId })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const commentDiv = document.querySelector(`.comment[data-comment-id="${commentId}"]`);
-            if (commentDiv) {
-                commentDiv.remove();
-            }
-        } else {
-            alert(data.error || 'Yorum silinemedi.');
+    function deleteComment(commentId) {
+        if (!confirm('Bu yorumu silmek istediğinizden emin misiniz?')) {
+            return;
         }
-    })
-    .catch(error => {
-        console.error('Hata:', error);
-        alert('Bir hata oluştu.');
-    });
-}
+
+        fetch("{% url 'delete_comment' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken(),
+            },
+            body: JSON.stringify({ comment_id: commentId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const commentDiv = document.querySelector(`.comment[data-comment-id="${commentId}"]`);
+                if (commentDiv) {
+                    commentDiv.remove();
+                }
+            } else {
+                alert(data.error || 'Yorum silinemedi.');
+            }
+        })
+        .catch(error => {
+            console.error('Hata:', error);
+            alert('Bir hata oluştu.');
+        });
+    }
 </script>
 
 </body>

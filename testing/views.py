@@ -60,11 +60,11 @@ def toggle_like(request, slug):
         like.is_like = True
         like.save()
 
-    # Activity Kaydı Ekle
     if like.is_like:
         Activity.objects.create(user=request.user, action='like', post=post)
 
-    return redirect('post_detail', slug=slug)
+    return JsonResponse({'status': 'success', 'liked': like.is_like})
+
 
 @login_required
 def toggle_follow(request, username):
