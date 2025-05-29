@@ -193,7 +193,8 @@
             border-radius: 10px;
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
             color: #000;
-            border: 2px solid #4895ef;
+            border-bottom: 2px solid #4895ef;
+            border-top: 2px solid #4895ef;
         }
 
         .post-card h2 {
@@ -523,7 +524,7 @@
 
     <!-- Sol Sütun: Popüler Postlar -->
     <div class="left-column">
-      <div class="popular-posts-box" style="border: 2px solid #4361EE; border-radius: 15px; padding: 15px;">
+      <div class="popular-posts-box" style="border-right: 2px solid #4361EE; border-left: 2px solid #4895ef; border-radius: 15px; padding: 15px;">
         <h3>Popüler Postlar (Son 1 Hafta)</h3>
         <ul>
           {% for post in popular_posts %}
@@ -592,7 +593,7 @@
     <!-- Sağ Sütun: Tags + Son Etkinlikler -->
     <div class="right-column">
       
-      <div class="tags-bar" style="padding: 10px; background-color: #000; border: 2px solid #4895ef; border-radius: 10px;">
+      <div class="tags-bar" style="padding: 10px; background-color: #000; border-top: 2px solid black; border-bottom: 2px solid black; border-right: 2px solid #4895ef; border-left: 2px solid #4895ef; border-radius: 10px;">
         <h3 style="color: white; text-align: center;">Tags</h3>
         <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
           {% for tag in tags %}
@@ -603,7 +604,7 @@
         </div>
       </div>
 
-      <div class="activity-box" style="border: 2px solid #4895ef; border-radius: 15px; padding: 15px;">
+      <div class="activity-box" style="border-left: 2px solid #4895ef; border-right: 2px solid #4895ef;border-radius: 15px; padding: 15px;">
         <h3>Son Etkinlikler</h3>
         <ul>
           {% for activity in activities %}
