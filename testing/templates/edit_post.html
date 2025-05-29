@@ -1,13 +1,115 @@
-{% extends 'base.html' %}
+{% load static %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=Jersey+10&family=Pixelify+Sans:wght@400..700&family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Pixelify Sans, sans-serif;
+        background-color: #000000;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+    }
+
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: #000000;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 40px; /* Önceki 100px'di, daha yukarı çektik */
+        outline: 2px solid #4895ef;
+    }
+
+
+    h2 {
+        color: #4895ef;
+        font-family: 'Silkscreen', cursive;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    form p {
+        margin-bottom: 1.2rem;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 0.3rem;
+    }
+
+    input[type="text"],
+    input[type="file"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 0.6rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-sizing: border-box;
+        font-size: 1rem;
+    }
+
+    button[type="submit"] {
+        background-color: #4895ef;
+        color: white;
+        border: none;
+        padding: 0.7rem 1.5rem;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: background-color 0.3s ease;
+        font-family: Pixelify Sans, sans-serif;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #3F37C9;
+    }
+
+    .btn-secondary {
+        display: inline-block;
+        background-color: #f72585;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        text-decoration: none;
+        margin-top: 1rem;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #b5179e;
+    }
+
+    .mt-2 {
+        margin-top: 1rem;
+    }
+
+
+</style>
 
 {% block content %}
 <div class="form-container">
-    <h2>Post Düzenle</h2>
+    <h2>Edit Post</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Güncelle</button>
+        <button type="submit">Save</button>
     </form>
-    <p><a href="{{ post.get_absolute_url }}">Posta geri dön</a></p>
+    <p><a href="{{ post.get_absolute_url }}">Return to Post</a></p>
 </div>
 {% endblock %}
